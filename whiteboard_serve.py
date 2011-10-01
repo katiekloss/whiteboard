@@ -19,16 +19,18 @@ def create_routes():
 
 if __name__ == "__main__":
     dispatcher = create_routes()
-    conf = {
-        '/': {'request.dispatch': dispatcher,
-              'tools.sessions.on': True,
-              'tools.cas_auth.on': True,
-              'tools.cas_auth.cas_server_root': 'https://login.case.edu/cas/'
-    }}
+   
+    cherrypy.config.update('config.ini')
     
-    cherrypy.tree.mount(root=None, config=conf)
+    core_config = {'/': {
+        'request.dispatch': dispatcher,
+        'tools.sessions.on': True,
+        'tools.cas_auth.on': True,
+        'tools.cas_auth.cas_server_root': 'https://login.case.edu/cas/'
+    }}
 
-    cherrypy.server.socket_host = '0.0.0.0'
+    cherrypy.tree.mount(root=None, config=core_config)
+
     cherrypy.engine.signal_handler.handlers = {'SIGINT': cherrypy.engine.exit}
     cherrypy.engine.signal_handler.subscribe()
 
