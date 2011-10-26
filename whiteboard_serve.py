@@ -2,17 +2,13 @@
 import cherrypy
 
 import whiteboard.auth.CASAuthTool
-
-class WhiteboardApp:
-    def index(self):
-        return "Hi! I'm Whiteboard!"
+import whiteboard.modules
 
 def create_routes():
     dispatcher = cherrypy.dispatch.RoutesDispatcher()
-    root = WhiteboardApp()
 
     # ROUTES START HERE
-    dispatcher.connect('index', '/', controller=root, action='index')
+    dispatcher.connect('index', '/', controller=whiteboard.modules.Root(), action='index')
     # ROUTES END HERE
 
     return dispatcher
@@ -26,10 +22,11 @@ if __name__ == "__main__":
         'request.dispatch': dispatcher,
         'tools.sessions.on': True,
         'tools.cas_auth.on': True,
-        'tools.cas_auth.cas_server_root': 'https://login.case.edu/cas/'
+        'tools.cas_auth.cas_server_root': 'https://login.case.edu/cas/',
+        'tools.cas_auth.cas_check_path': '/Auth/CAS'
     }}
 
-    cherrypy.tree.mount(root=None, config=core_config)
+    cherrypy.tree.mount(root=None, script_name='/whiteboard', config=core_config)
 
     cherrypy.engine.signal_handler.handlers = {'SIGINT': cherrypy.engine.exit}
     cherrypy.engine.signal_handler.subscribe()
