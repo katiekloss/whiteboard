@@ -24,7 +24,11 @@ if __name__ == "__main__":
         'tools.sessions.on': True,
         'tools.cas_auth.on': True,
         'tools.cas_auth.cas_server_root': 'https://login.case.edu/cas/',
-        'tools.cas_auth.cas_check_path': '/Auth/CAS'
+        'tools.cas_auth.cas_check_path': '/Auth/CAS',
+        'tools.proxy.on': True,
+
+        # Things break if you set .base to the full URL and then use script_name
+        'tools.proxy.base': 'http://vale.case.edu'
     }}
 
     cherrypy.tree.mount(root=None, script_name='/whiteboard', config=core_config)
