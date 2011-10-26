@@ -3,20 +3,25 @@ import urllib2
 
 import whiteboard.sqltool
 
-def database_trigger(username):
-    """Checks to ensure that the given user is present in the Users table"""
+def database_trigger(username, cas_ticket):
+    """Checks to ensure that the given user is present in the Users table
+    and records the login to LoginLog.
+    """
 
     sql = whiteboard.sqltool.SqlTool()
     sql.query_text = "SELECT * FROM Users WHERE caseid=@caseid;"
     sql.addParameter("@caseid", username)
     with sql.execute() as datareader:
-        if datareader.rowcount() > 0:
-            return
-    print "Creating new user entry for '%s'" % username
-    sql.query_text = "INSERT INTO Users VALUES (@caseid)"
-    sql.addParameter("@caseid", username)
-    sql.execute()
+        if datareader.rowcount() == 0:
+            sql.query_text = "INSERT INTO Users VALUES (@caseid)"
+            sql.addParameter("@caseid", username)
+            sql.execute()
 
+    sql.query_text = "INSERT INTO LoginLog VALUES (NOW(), @caseid, @ip_addr, @ticket);"
+    sql.addParameter("@caseid", username)
+    sql.addParameter("@ip_addr", cherrypy.request.remote.ip)
+    sql.addParameter("@ticket", cas_ticket)
+    sql.execute()
 
 def auth_handler(cas_server_root, cas_check_path):
 
@@ -38,7 +43,7 @@ def auth_handler(cas_server_root, cas_check_path):
             username = get_cas_username(ticket)
             if username is not None:
                 cherrypy.session['username'] = username
-                database_trigger(username)
+                database_trigger(username, ticket)
                 raise cherrypy.HTTPRedirect(cherrypy.url('/'))
 
     if not 'username' in cherrypy.session:
