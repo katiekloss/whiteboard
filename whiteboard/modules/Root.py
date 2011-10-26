@@ -1,3 +1,5 @@
+import whiteboard.template
+
 class Root:
     def index(self):
-        return "Hi! I'm Whiteboard!"
+        return whiteboard.template.render('index.html')
