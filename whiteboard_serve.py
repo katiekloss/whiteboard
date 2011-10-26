@@ -8,6 +8,7 @@ def create_routes():
     dispatcher = cherrypy.dispatch.RoutesDispatcher()
 
     # ROUTES START HERE
+    dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=whiteboard.modules.Static(), action='serve')
     dispatcher.connect('index', '/', controller=whiteboard.modules.Root(), action='index')
     # ROUTES END HERE
 
