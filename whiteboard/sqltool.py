@@ -1,6 +1,8 @@
 import psycopg2
 import psycopg2.extras
 
+import cherrypy
+
 class SqlTool:
     """Class for executing SQL queries and retrieving their results.
     Example:
@@ -19,11 +21,12 @@ class SqlTool:
     __parameters = {}
 
     #: SqlTool Constructor
-    def __init__(self, connstring):
-        self.__dbconn = psycopg2.connect(connstring)
+    def __init__(self):
+        self.__dbconn = psycopg2.connect(cherrypy.config['db_connstring'])
     
     def __del__(self):
         try:
+            self.__dbconn.commit()
             self.__dbconn.close()
         except:
             pass
@@ -93,6 +96,11 @@ class SqlCursor:
         except psycopg2.ProgrammingError:
             row = None
         return row
+
+    def rowcount(self):
+        """Returns the number of rows in the result set"""
+
+        return self.__cursor.rowcount
 
     # Context manager methods __enter__ and __exit__
     def __enter__(self):

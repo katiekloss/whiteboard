@@ -75,10 +75,34 @@ CREATE TABLE Grades (
 
 CREATE TABLE Roles (
     caseid varchar(6) NOT NULL,
-    courseid integer,
-    rolename varchar(256),
+    courseid integer NOT NULL,
+    rolename varchar(256) NOT NULL,
 
     PRIMARY KEY (caseid, courseid, rolename),
     FOREIGN KEY (caseid) REFERENCES Users ON DELETE CASCADE,
     FOREIGN KEY (courseid) REFERENCES Courses ON DELETE CASCADE
 );
+
+---
+--- Procedures
+---
+
+CREATE FUNCTION create_default_role() RETURNS trigger LANGUAGE plpgsql
+AS $$
+BEGIN
+    INSERT INTO Roles (caseid, courseid, rolename) VALUES (NEW.caseid, 0, 'student');
+    RETURN NULL;
+END;
+$$;
+
+---
+--- Triggers
+---
+
+CREATE TRIGGER create_default_role AFTER INSERT ON Users FOR EACH ROW EXECUTE PROCEDURE create_default_role();
+
+---
+--- Initial values
+---
+
+INSERT INTO Courses VALUES (0, 'root', '', 'Whiteboard Site Course');
