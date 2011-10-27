@@ -14,3 +14,14 @@ div#indexCourselist
 {
     float: left;
 }
+
+div#courseHeader
+{
+    font-family: Helvetica;
+    text-align: center;
+}
+
+div#courseLinksHeader
+{
+    text-align: center;
+}

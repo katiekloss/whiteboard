@@ -10,6 +10,7 @@ def create_routes():
     # ROUTES START HERE
     dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=whiteboard.controllers.Static(), action='serve')
     dispatcher.connect('index', '/', controller=whiteboard.controllers.Root(), action='index')
+    dispatcher.connect('course', '/course/{courseid}', controller=whiteboard.controllers.Course(), action='courseMain')
     # ROUTES END HERE
 
     return dispatcher
