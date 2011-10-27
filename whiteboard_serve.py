@@ -2,14 +2,14 @@
 import cherrypy
 
 import whiteboard.auth.CASAuthTool
-import whiteboard.modules
+import whiteboard.controllers
 
 def create_routes():
     dispatcher = cherrypy.dispatch.RoutesDispatcher()
 
     # ROUTES START HERE
-    dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=whiteboard.modules.Static(), action='serve')
-    dispatcher.connect('index', '/', controller=whiteboard.modules.Root(), action='index')
+    dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=whiteboard.controllers.Static(), action='serve')
+    dispatcher.connect('index', '/', controller=whiteboard.controllers.Root(), action='index')
     # ROUTES END HERE
 
     return dispatcher
