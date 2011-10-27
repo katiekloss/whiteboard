@@ -1,0 +1,8 @@
+<%inherit file="base.html" />
+<%def name="title()">Error</%def>
+
+<%block name="bodyContent">
+<h1>Error</h1>
+<p>An error occurred while processing your request.</p>
+<p>Error details: ${ctx['error']}</p>
+</%block>
