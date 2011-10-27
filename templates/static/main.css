@@ -1,0 +1,16 @@
+div#whiteboardHeader
+{
+    font-family: Helvetica;
+    text-align: center;
+    font-size: 24pt;
+}
+
+div#indexAnnouncements
+{
+    float: right;
+}
+
+div#indexCourselist
+{
+    float: left;
+}

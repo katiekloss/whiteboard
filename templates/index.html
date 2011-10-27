@@ -2,5 +2,29 @@
 <%def name="title()">Whiteboard</%def>
 
 <%block name="bodyContent">
-Hello, world!
+
+<div id="whiteboardHeader">
+WHITEBOARD
+</div>
+
+<hr />
+
+<div id="indexAnnouncements">
+<p>Course announcements:</p>
+<ul>
+% for announcement in ctx['announcements']:
+<li><p>${announcement['date']} (${announcement['code']}): ${announcement['content']} <small>Posted by ${announcement['caseid']}</small></p></li>
+% endfor
+</ul>
+</div>
+
+<div id="indexCourselist">
+<p>Your courses:</p>
+<ul>
+% for course in ctx['courses']:
+<li><p>${course['code']}</p></li>
+% endfor
+</ul>
+</div>
+
 </%block>

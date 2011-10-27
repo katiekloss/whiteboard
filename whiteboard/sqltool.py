@@ -53,7 +53,7 @@ class SqlTool:
         for key in self.__parameters:
             self.query_text = self.query_text.replace(key, "%%(%s)s" % key)
 
-        dbcursor = self.__dbconn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        dbcursor = self.__dbconn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         dbcursor.execute(self.query_text, self.__parameters)
         return SqlCursor(dbcursor)
 

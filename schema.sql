@@ -1,3 +1,12 @@
+---
+--- Whiteboard SQL schema
+--- Developed on PostgreSQL 9.1
+---
+
+---
+--- Tables
+---
+
 CREATE TABLE Users (
     caseid varchar(6) NOT NULL,
 
@@ -83,6 +92,13 @@ CREATE TABLE Roles (
     FOREIGN KEY (courseid) REFERENCES Courses ON DELETE CASCADE
 );
 
+---
+--- Views
+---
+
+CREATE VIEW CourseRegistration
+AS SELECT C.courseid, C.code, C.term, C.title, R.caseid, R.rolename FROM Courses C, Roles R WHERE C.courseid = R.courseid AND C.courseid > 0;
+    
 ---
 --- Procedures
 ---
