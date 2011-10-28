@@ -22,7 +22,7 @@ WHITEBOARD
 <p>Your courses:</p>
 <ul>
 % for course in ctx['courses']:
-<li><p>${course['code']}</p></li>
+<li><p><a href="course/${course['courseid']}/">${course['code']}</a></p></li>
 % endfor
 </ul>
 </div>

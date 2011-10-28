@@ -1,0 +1,22 @@
+<%inherit file="base.html" />
+<%def name="title()">${ctx['courseinfo']['code']} - ${ctx['courseinfo']['title']}</%def>
+
+<%block name="bodyContent">
+<div id="courseHeader">
+<h1>${ctx['courseinfo']['code']}</h1>
+<h2>${ctx['courseinfo']['title']}</h2>
+</div>
+
+<hr />
+
+<div id="courseLinksHeader">
+<a href="documents/">Documents</a>
+<a href="grades">Grades</a>
+<a href="assignments">Assignments</a>
+</div>
+
+<hr />
+
+<%block name="coursePageContent" />
+
+</%block>
