@@ -26,6 +26,8 @@ if __name__ == "__main__":
     core_config = {'/': {
         'request.dispatch': dispatcher,
         'tools.sessions.on': True,
+        'tools.sessions.storage_type': 'file',
+        'tools.sessions.storage_path': 'session_store',
         'tools.cas_auth.on': True,
         'tools.cas_auth.cas_server_root': 'https://login.case.edu/cas/',
         'tools.cas_auth.cas_check_path': '/Auth/CAS',
