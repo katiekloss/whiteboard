@@ -1,10 +1,10 @@
 <%inherit file="base.html" />
-<%def name="title()">${ctx['courseinfo']['code']} - ${ctx['courseinfo']['title']}</%def>
+<%def name="title()">${ctx['course']['code']} - ${ctx['course']['title']}</%def>
 
 <%block name="bodyContent">
 <div id="courseHeader">
-<h1>${ctx['courseinfo']['code']}</h1>
-<h2>${ctx['courseinfo']['title']}</h2>
+<h1>${ctx['course']['code']}</h1>
+<h2>${ctx['course']['title']}</h2>
 </div>
 
 <hr />
