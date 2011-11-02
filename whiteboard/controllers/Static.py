@@ -6,5 +6,10 @@ class Static:
 
     def serve(self, file_name):
         """Serves a static template such as a CSS stylesheet file"""
-        cherrypy.response.headers['Content-Type'] = 'text/css'
-        return whiteboard.template.render('static/' + file_name)
+        ext = file_name[file_name.rindex('.'):]
+        if ext == ".css":
+            cherrypy.response.headers['Content-Type'] = 'text/css'
+        elif ext == ".js":
+            cherrypy.response.headers['Content-Type'] = 'text/javascript'
+
+        return open('templates/static/' + file_name)

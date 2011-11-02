@@ -2,18 +2,22 @@
 import cherrypy
 
 import whiteboard.auth.CASAuthTool
-import whiteboard.controllers
+from whiteboard.controllers import *
 
 def create_routes():
     dispatcher = cherrypy.dispatch.RoutesDispatcher()
 
     # ROUTES START HERE
-    dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=whiteboard.controllers.Static(), action='serve')
-    dispatcher.connect('index', '/', controller=whiteboard.controllers.Root(), action='index')
-    dispatcher.connect('course', '/course/{courseid}/', controller=whiteboard.controllers.Course(), action='courseMain')
-    dispatcher.connect('documents', '/course/{courseid}/documents/', controller=whiteboard.controllers.Documents(), action='documentsMain')
-    dispatcher.connect('assignments', '/course/{courseid}/assignments', controller=whiteboard.controllers.Assignments(), action='assignmentsMain')
-    dispatcher.connect('grades', '/course/{courseid}/grades', controller=whiteboard.controllers.Grades(), action='gradesMain')
+    dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=Static(), action='serve')
+    dispatcher.connect('index', '/', controller=Root(), action='index')
+    dispatcher.connect('course', '/course/{courseid}/', controller=Course(), action='courseMain')
+    dispatcher.connect('documents', '/course/{courseid}/documents/', controller=Documents(), action='documentsMain')
+    dispatcher.connect('assignments', '/course/{courseid}/assignments', controller=Assignments(), action='assignmentsMain')
+    dispatcher.connect('grades', '/course/{courseid}/grades', controller=Grades(), action='gradesMain')
+    dispatcher.connect('siteroleadmin', '/roleadmin', controller=RoleAdmin(), action='siteRoleAdmin')
+    dispatcher.connect('siteroleadminsubmit', '/roleadmin/ajaxSubmit', controller=RoleAdmin(), action='siteRoleAdminSubmit')
+    dispatcher.connect('siteroleadminvalidate', '/roleadmin/ajaxValidateUsername', controller=RoleAdmin(), action='siteRoleAdminValidate')
+    
     # ROUTES END HERE
 
     return dispatcher

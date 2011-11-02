@@ -1,4 +1,5 @@
 <%inherit file="base.html" />
+<%! import whiteboard.helpers.RoleHelper as RoleHelper %>
 <%def name="title()">Whiteboard</%def>
 
 <%block name="bodyContent">
@@ -26,5 +27,10 @@ WHITEBOARD
 % endfor
 </ul>
 </div>
+
+% if RoleHelper.current_user_has_role(0, 'siteroleadmin'):
+<div id="indexRoleAdminLink">
+<p><a href="roleadmin">Site Role Administration</a></p>
+% endif
 
 </%block>
