@@ -10,7 +10,7 @@
 $(function() {
     $("#roleEdit").submit(function() {
         var $ajaxData = {'ajaxData': $("#roleEdit").form2json()};
-        $.post('roleadmin/ajaxSubmit', $ajaxData, function(data) {
+        $.post('/whiteboard/ajax/siteRoleSubmit', $ajaxData, function(data) {
             $("#roleEditResult").html("<p>" + data["result"] + "</p>");
             if(data["status"] == "success") {
                 $("#roleEditResult").addClass("success");
@@ -24,7 +24,7 @@ $(function() {
     $("#roleUsername").change(function() {
         var username = $(this).val();
         var $ajaxData = {'ajaxData': JSON.stringify({'username': username})};
-        $.post('roleadmin/ajaxValidateUsername', $ajaxData, function(data) {
+        $.post('/whiteboard/ajax/siteRoleValidate', $ajaxData, function(data) {
             if(data["status"] == "success") {
                 $("#siteRoleEditor").removeClass("hidden"); 
                 $("#roleEdit > input[name|=username]").val(username);

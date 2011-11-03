@@ -10,13 +10,16 @@ def create_routes():
     # ROUTES START HERE
     dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=Static(), action='serve')
     dispatcher.connect('index', '/', controller=Root(), action='index')
+
+    dispatcher.connect('siteRoleAdmin', '/roleadmin', controller=RoleAdmin(), action='siteRoleAdmin')
+    dispatcher.connect('siteRoleSubmit', '/ajax/siteRoleSubmit', controller=Ajax(), action='siteRoleSubmit')
+    dispatcher.connect('siteRoleValidate', '/ajax/siteRoleValidate', controller=Ajax(), action='siteRoleValidate')
+
     dispatcher.connect('course', '/course/{courseid}/', controller=Course(), action='courseMain')
     dispatcher.connect('documents', '/course/{courseid}/documents/', controller=Documents(), action='documentsMain')
     dispatcher.connect('assignments', '/course/{courseid}/assignments', controller=Assignments(), action='assignmentsMain')
     dispatcher.connect('grades', '/course/{courseid}/grades', controller=Grades(), action='gradesMain')
-    dispatcher.connect('siteroleadmin', '/roleadmin', controller=RoleAdmin(), action='siteRoleAdmin')
-    dispatcher.connect('siteroleadminsubmit', '/roleadmin/ajaxSubmit', controller=RoleAdmin(), action='siteRoleAdminSubmit')
-    dispatcher.connect('siteroleadminvalidate', '/roleadmin/ajaxValidateUsername', controller=RoleAdmin(), action='siteRoleAdminValidate')
+    
     
     # ROUTES END HERE
 
