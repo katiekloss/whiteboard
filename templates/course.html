@@ -1,7 +1,14 @@
 <%inherit file="courseskeleton.html" />
+<%! import whiteboard.helpers.RoleHelper as RoleHelper %>
 
 <%block name="coursePageContent">
 <div id="courseAnnouncements">
 Announcements go here
 </div>
+
+% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
+<div class="footer">
+<a href="roleadmin">Manage Roles</a>
+</div>
+% endif
 </%block>

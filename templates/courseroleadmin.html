@@ -1,0 +1,55 @@
+<%inherit file="base.html"/>
+<%! import whiteboard.helpers.RoleHelper as RoleHelper %>
+<%def name="title()">Whiteboard Course Role Administration</%def>
+
+<%block name="headerAddons">
+<script type="text/javascript" src="/whiteboard/static/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="/whiteboard/static/json2.js"></script>
+<script type="text/javascript" src="/whiteboard/static/ajaxMagic.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("#roleEdit").submit(function() {
+        var $ajaxData = {'ajaxData': $("#roleEdit").form2json()};
+        $.post('/whiteboard/ajax/courseRoleSubmit', $ajaxData, function(data) {
+            $("#roleEditResult").html("<p>" + data["result"] + "</p>");
+            if(data["status"] == "success") {
+                $("#roleEditResult").addClass("success");
+            }
+        });
+        return false;
+    });
+});
+
+$(function() {
+    $("#roleUsername").change(function() {
+        var username = $(this).val();
+        var $ajaxData = {'ajaxData': JSON.stringify({'username': username, 'courseid': ${ctx['courseid']}})};
+        $.post('/whiteboard/ajax/courseRoleValidate', $ajaxData, function(data) {
+            if(data["status"] == "success") {
+                $("#courseRoleEditor").removeClass("hidden"); 
+                $("#roleEdit > input[name|=username]").val(username);
+                $("#roleEdit > input[name|=courseid]}").val(${ctx['courseid']});
+            }
+        });
+    });
+});
+
+</script>
+</%block>
+
+<%block name="bodyContent">
+<p>User to edit: <input id="roleUsername" type="text" /></p>
+
+<div id="courseRoleEditor" class="hidden">
+        <form id="roleEdit" action="#" method="POST">
+                <input type="hidden" name="username" value="" />
+                <input type="hidden" name="courseid" value="" />
+                % for role in RoleHelper.course_role_names:
+                <input type="checkbox" name="roles" value="${role}">${role}</input><br/>
+                % endfor
+                <input type="submit" value="Update Roles" />
+        </form>
+        <div id="roleEditResult">
+        </div>
+</div>
+</%block>

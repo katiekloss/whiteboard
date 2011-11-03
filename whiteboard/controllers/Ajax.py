@@ -6,6 +6,37 @@ import json
 class Ajax:
     """Controller for all AJAX calls"""
 
+    def courseRoleValidate(self, ajaxData):
+        """Validate a username for course role editing"""
+            
+        form = json.loads(ajaxData)
+            
+        if not RoleHelper.current_user_has_role(form['courseid'], 'instructor'):
+            ctx = {'error': 'You are not permitted to edit course roles.'}
+            return whiteboard.template.render('error.html', context_dict = ctx)
+
+        cherrypy.response.headers['Content-Type'] = 'text/json'
+            
+        return json.dumps({'status': 'success'})
+
+    def courseRoleSubmit(self, ajaxData):
+        """Update user's roles"""
+
+        form = json.loads(ajaxData)
+
+        if not RoleHelper.current_user_has_role(form['courseid'], 'instructor'):
+            ctx = {'error': 'You are not permitted to edit course roles.'}
+            return whiteboard.template.render('error.html', context_dict = ctx)
+
+        cherrypy.response.headers['Content-Type'] = 'text/json'
+        for role in form['roles']:
+            RoleHelper.grant_user_role(form['username'], form['courseid'], role)
+
+        for role in set(RoleHelper.course_role_names).difference(form['roles']):
+            RoleHelper.revoke_user_role(form['username'], form['courseid'], role)
+
+        return json.dumps({'status': "success", 'result': 'Roles updated successfully'}) 
+
     def siteRoleValidate(self, ajaxData):
             """Validate a username for role editing"""
 

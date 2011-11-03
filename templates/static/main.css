@@ -15,12 +15,6 @@ div#indexCourselist
     float: left;
 }
 
-div#indexRoleAdminLink
-{
-    position: absolute;
-    bottom: 0;
-}
-
 div#courseHeader
 {
     font-family: Helvetica;
@@ -30,6 +24,12 @@ div#courseHeader
 div#courseLinksHeader
 {
     text-align: center;
+}
+
+.footer
+{
+    position: absolute;
+    bottom: 0;
 }
 
 .hidden
