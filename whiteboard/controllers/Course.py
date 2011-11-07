@@ -34,8 +34,7 @@ class Course:
     def addAnnouncement(self, courseid):
         """Render announcement creation page"""
 
-        if not RoleHelper.current_user_has_role(courseid, 'instructor') and \
-                not RoleHelper.current_user_has_role(courseid, 'ta'):
+        if not RoleHelper.current_user_has_role(courseid, 'instructor,ta'):
             ctx = {'error': 'You must be an instructor or TA to use this feature.'}
             return whiteboard.template.render('error.html', context_dict = ctx)
 

@@ -73,8 +73,7 @@ class Ajax:
         """Add an announcement to a course"""
 
         form = json.loads(ajaxData)
-        if not RoleHelper.current_user_has_role(form['courseid'], 'instructor') and \
-                not RoleHelper.current_user_has_role(form['courseid'], 'ta'):
+        if not RoleHelper.current_user_has_role(form['courseid'], 'instructor,ta'):
             ctx = {'error': 'Only instructors and TAs are allowed to use this feature'}
             return whiteboard.template.render('error.html', context_dict = ctx)
 

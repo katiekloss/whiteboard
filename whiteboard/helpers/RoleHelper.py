@@ -10,17 +10,17 @@ class RoleHelper:
 
     @staticmethod
     def current_user_has_role(courseid, role):
-        """Returns True if the current user has the specified role on the given course,
-        returns False otherwise.
+        """Returns True if the current user has any of the specified roles
+        on the given course, returns False otherwise.
         """
 
         sql = whiteboard.sqltool.SqlTool()
+        # Unfortunately need to override the parameter replacement for this to work
         sql.query_text = """SELECT * FROM Roles WHERE caseid=@caseid
             AND courseid=@courseid
-            AND rolename=@rolename"""
+            AND rolename IN (%s)""" % ','.join(["'%s'" % x.strip() for x in role.split(',')])
         sql.addParameter("@caseid", cherrypy.session['username'])
         sql.addParameter("@courseid", courseid)
-        sql.addParameter("@rolename", role)
         with sql.execute() as datareader:
             if datareader.rowcount() > 0:
                 return True
