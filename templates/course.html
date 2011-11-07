@@ -3,12 +3,16 @@
 
 <%block name="coursePageContent">
 <div id="courseAnnouncements">
-Announcements go here
+<ul>
+% for announcement in ctx['announcements']:
+<li>${announcement['date']} - ${announcement['caseid']}: ${announcement['content']}</li>
+% endfor
+</ul>
 </div>
 
 % if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
 <div class="footer">
-<a href="roleadmin">Manage Roles</a>
+<a href="roleadmin">Manage Roles</a> + <a href="addAnnouncement">Create an Announcement</a>
 </div>
 % endif
 </%block>

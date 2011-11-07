@@ -1,0 +1,35 @@
+<%inherit file="base.html" />
+<%def name="title()">Add Announcement</%def>
+
+<%block name="headerAddons">
+<script type="text/javascript" src="/whiteboard/static/jquery-1.6.4.min.js"></script>
+<script type="text/javascript" src="/whiteboard/static/json2.js"></script>
+<script type="text/javascript" src="/whiteboard/static/ajaxMagic.js"></script>
+<script type="text/javascript">
+$(function() {
+    $("#announcement").submit(function() {
+        var $ajaxData = {'ajaxData': $("#announcement").form2json()};
+        $.post('/whiteboard/ajax/courseAddAnnouncement', $ajaxData, function(data) {
+            if(data['status'] == 'success') {
+                window.location = data['redirect_url'];
+            } else {
+                // Oh my GOD make this prettier
+                alert("Announcement add failed!");
+            }
+        });
+        return false;
+    });
+});
+</script>
+
+</%block>
+
+<%block name="bodyContent">
+<div id="courseAnnouncementEditor">
+<form id="announcement" action="#" method="POST">
+    <input type="hidden" name="courseid" value="${ctx['courseid']}" />
+    Announcement content: <br /><textarea name="content" rows="5" cols="50" ></textarea><br />
+    <input type="submit" value="Create Announcement" />
+</form>
+</div>
+</%block>

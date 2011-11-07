@@ -1,4 +1,5 @@
 import whiteboard.helpers.RoleHelper as RoleHelper
+import whiteboard.helpers.AnnouncementHelper as AnnouncementHelper
 import whiteboard.template
 import cherrypy
 import json
@@ -66,4 +67,18 @@ class Ajax:
         for role in set(RoleHelper.site_role_names).difference(form['roles']):
             RoleHelper.revoke_user_role(form['username'], 0, role)
 
-        return json.dumps({'status': "success", 'result': 'Roles updated successfully'}) 
+        return json.dumps({'status': "success", 'result': 'Roles updated successfully'})
+
+    def courseAddAnnouncement(self, ajaxData):
+        """Add an announcement to a course"""
+
+        form = json.loads(ajaxData)
+        if not RoleHelper.current_user_has_role(form['courseid'], 'instructor') and \
+                not RoleHelper.current_user_has_role(form['courseid'], 'ta'):
+            ctx = {'error': 'Only instructors and TAs are allowed to use this feature'}
+            return whiteboard.template.render('error.html', context_dict = ctx)
+
+        AnnouncementHelper.add_announcement(form['courseid'], cherrypy.session['username'], form['content'])
+
+        cherrypy.response.headers['Content-Type'] = 'text/json'
+        return json.dumps({'status': 'success', 'redirect_url': '/whiteboard/course/%s/' % form['courseid']})
