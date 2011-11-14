@@ -10,9 +10,13 @@
 </ul>
 </div>
 
-% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
 <div class="footer">
-<a href="roleadmin">Manage Roles</a> + <a href="addAnnouncement">Create an Announcement</a>
-</div>
+% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
+<a href="roleadmin">Manage Roles</a>
 % endif
+% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor, ta'):
++ <a href="addAnnouncement">Create an Announcement</a>
++ <a href="addDocument">Upload a Document</a>
+% endif
+</div>
 </%block>

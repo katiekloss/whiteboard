@@ -1,0 +1,12 @@
+<%inherit file="base.html" />
+<%def name="title()">Add Document</%def>
+
+<%block name="bodyContent">
+<div id="documentUploader">
+<form id=frmDocumentUploader" method="POST" enctype="multipart/form-data">
+    Document Name: <input type="text" name="name" /><br />
+    Document File: <input type="file" name="upload" /><br />
+    <input type="submit" value="Upload Document" />
+</form>
+</div>
+</%block>
