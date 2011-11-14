@@ -1,4 +1,5 @@
 import whiteboard.template
+import whiteboard.helpers.CourseHelper as CourseHelper
 import whiteboard.helpers.RoleHelper as RoleHelper
 import whiteboard.sqltool
 import cherrypy
@@ -7,8 +8,15 @@ import os
 class Documents:
     """Controller for all document-related actions"""
     
-    def documentsMain(self, courseid):
-        return whiteboard.template.render('documents.html')
+    def documentsMain(self, courseid, path=None):
+
+
+        ctx = {'course': CourseHelper.fetch_course(courseid)}
+        if path == None:
+            pass
+        else:
+            folders = path.split('/')
+        return whiteboard.template.render('documents.html', context_dict=ctx)
 
     def addDocument(self, courseid, name=None, upload=None):
         

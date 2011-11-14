@@ -19,7 +19,7 @@ def create_routes():
     dispatcher.connect('courseRoleSubmit', '/ajax/courseRoleSubmit', controller=Ajax(), action='courseRoleSubmit')
     dispatcher.connect('courseRoleValidate', '/ajax/courseRoleValidate', controller=Ajax(), action='courseRoleValidate')
 
-    dispatcher.connect('course', '/course/{courseid}/', controller=Course(), action='courseMain')
+    dispatcher.connect('course', '/course/{courseid}/{path}', controller=Course(), action='courseMain')
     dispatcher.connect('addAnnouncement', '/course/{courseid}/addAnnouncement', controller=Course(), action='addAnnouncement')
     dispatcher.connect('ajaxAddAnnouncement', '/ajax/courseAddAnnouncement', controller=Ajax(), action='courseAddAnnouncement')
 
