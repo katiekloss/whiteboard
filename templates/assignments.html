@@ -1,5 +1,9 @@
 <%inherit file="courseskeleton.html" />
 
 <%block name="coursePageContent">
-Assignment list goes here
+<ul>
+% for assignment in ctx['assignments']:
+<li>${assignment['title']} - Due by ${assignment['due']}, worth ${assignment['points']} points</li>
+% endfor
+</ul>
 </%block>

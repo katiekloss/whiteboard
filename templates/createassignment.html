@@ -1,0 +1,11 @@
+<%inherit file="base.html" />
+<%def name="title()">Create Assignment</%def>
+
+<%block name="bodyContent">
+<form id="assignmentForm" method="POST">
+    Assignment name: <input type="text" name="title" /><br />
+    Due date: <input type="text" name="duedate" /><br />
+    Total points: <input type="text" name="points" /><br />
+    <input type="submit" value="Create Assignment" />
+</form>
+</%block>
