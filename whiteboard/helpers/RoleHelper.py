@@ -33,12 +33,12 @@ class RoleHelper:
             def _called(*args, **kwargs):
                 if kwargs.has_key('courseid'):
                     if RoleHelper.current_user_has_role(kwargs['courseid'], rolename):
-                        function(*args, **kwargs)
+                        return function(*args, **kwargs)
                     else:
                         return whiteboard.template.render('error.html', context_dict={'error': error})
                 else:
                     if RoleHelper.current_user_has_role(0, rolename):
-                        function(*args, **kwargs)
+                        return function(*args, **kwargs)
                     else:
                         return whiteboard.template.render('error.html', context_dict={'error': error})
             return _called
