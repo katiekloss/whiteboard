@@ -22,20 +22,14 @@ class Course:
 
         return whiteboard.template.render('course.html', context_dict=ctx)
 
+    @RoleHelper.require_role('instructor', 'You must be an instructor to edit course roles')
     def courseRoleAdmin(self, courseid):
         """Render the roleadmin view"""
 
-        if not RoleHelper.current_user_has_role(courseid, 'instructor'):
-            ctx = {'error': 'You are not permitted to edit course roles.'}
-            return whiteboard.template.render('error.html', context_dict = ctx)
-
         return whiteboard.template.render('courseroleadmin.html', context_dict = {'courseid': courseid})
 
+    @RoleHelper.require_role('instructor,ta', 'Only instructors and TAs are permitted to edit roles')
     def addAnnouncement(self, courseid):
         """Render announcement creation page"""
-
-        if not RoleHelper.current_user_has_role(courseid, 'instructor,ta'):
-            ctx = {'error': 'You must be an instructor or TA to use this feature.'}
-            return whiteboard.template.render('error.html', context_dict = ctx)
 
         return whiteboard.template.render('courseaddannouncement.html', context_dict = {'courseid': courseid})

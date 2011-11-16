@@ -10,7 +10,6 @@ class Documents:
     
     def documentsMain(self, courseid, path=None):
 
-
         ctx = {'course': CourseHelper.fetch_course(courseid)}
         if path == None:
             pass
@@ -18,10 +17,8 @@ class Documents:
             folders = path.split('/')
         return whiteboard.template.render('documents.html', context_dict=ctx)
 
+    @RoleHelper.require_role('instructor,ta', 'You must be an instructor or TA to upload documents')
     def addDocument(self, courseid, name=None, upload=None):
-        
-        if not RoleHelper.current_user_has_role(courseid, 'instructor, ta'):
-            return whiteboard.template.render('error.html', context_dict={'error': 'You are not allowed to use this feature'})
 
         ctx = {'courseid': courseid}
         if cherrypy.request.method == "GET":

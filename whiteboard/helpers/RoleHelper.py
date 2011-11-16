@@ -28,6 +28,23 @@ class RoleHelper:
                 return False
 
     @staticmethod
+    def require_role(rolename, error):
+        def _decorator(function):
+            def _called(*args, **kwargs):
+                if kwargs.has_key('courseid'):
+                    if RoleHelper.current_user_has_role(kwargs['courseid'], rolename):
+                        function(*args, **kwargs)
+                    else:
+                        return whiteboard.template.render('error.html', context_dict={'error': error})
+                else:
+                    if RoleHelper.current_user_has_role(0, rolename):
+                        function(*args, **kwargs)
+                    else:
+                        return whiteboard.template.render('error.html', context_dict={'error': error})
+            return _called
+        return _decorator
+
+    @staticmethod
     def grant_user_role(username, courseid, role):
         """Grants the given user the specified role.
         Does nothing if the user already has the role.
