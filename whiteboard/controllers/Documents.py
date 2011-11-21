@@ -1,9 +1,11 @@
 import whiteboard.template
 import whiteboard.helpers.CourseHelper as CourseHelper
 import whiteboard.helpers.RoleHelper as RoleHelper
+import whiteboard.helpers.DocumentHelper as DocumentHelper
 import whiteboard.sqltool
 import cherrypy
 import os
+import mimetypes
 
 class Documents:
     """Controller for all document-related actions"""
@@ -41,3 +43,16 @@ class Documents:
                         break
                     permanent.write(data)
             return "File written successfully"
+
+    def serve(self, documentid):
+        
+        file = DocumentHelper.get_file(documentid)
+        if file == None:
+            raise cherrypy.HTTPError(404)
+
+        path = ''.join((file['path'], file['name']))
+        try:
+            cherrypy.response.headers['Content-Type'] = mimetypes.guess_type(path)[0]
+            return open(path)
+        except IOError:
+            raise

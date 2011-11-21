@@ -10,6 +10,7 @@ def create_routes():
     # ROUTES START HERE
     dispatcher.connect('staticContent', '/static/{file_name:.*}', controller=Static(), action='serve')
     dispatcher.connect('index', '/', controller=Root(), action='index')
+    dispatcher.connect('documenthandler', '/document/{documentid}', controller=Documents(), action='serve')
 
     dispatcher.connect('siteRoleAdmin', '/roleadmin', controller=RoleAdmin(), action='siteRoleAdmin')
     dispatcher.connect('siteRoleSubmit', '/ajax/siteRoleSubmit', controller=Ajax(), action='siteRoleSubmit')
