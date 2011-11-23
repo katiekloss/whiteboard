@@ -1,5 +1,8 @@
 <%inherit file="courseskeleton.html" />
 
 <%block name="coursePageContent">
-List of documents would go here...
+<ul>
+% for document in ctx['documents']:
+<li><a href="/whiteboard/document/${document['documentid']}">${document['name']}</a></li>
+% endfor
 </%block>

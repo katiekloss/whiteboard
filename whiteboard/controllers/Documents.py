@@ -17,6 +17,8 @@ class Documents:
             pass
         else:
             folders = path.split('/')
+
+        ctx['documents'] = DocumentHelper.get_files_for_course(courseid)
         return whiteboard.template.render('documents.html', context_dict=ctx)
 
     @RoleHelper.require_role('instructor,ta', 'You must be an instructor or TA to upload documents')

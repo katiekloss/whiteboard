@@ -11,3 +11,15 @@ class DocumentHelper:
             if datareader.rowcount() == 0:
                 return None
             return datareader.fetch()
+
+    @staticmethod
+    def get_files_for_course(courseid):
+        sql = whiteboard.sqltool.SqlTool()
+        sql.query_text = "SELECT * FROM Documents WHERE courseid = @courseid"
+        sql.addParameter("@courseid", courseid)
+
+        documents = []
+        with sql.execute() as datareader:
+            for row in datareader:
+                documents.append(row)
+        return documents
