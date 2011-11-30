@@ -52,12 +52,11 @@ if __name__ == "__main__":
         'tools.cas_auth.cas_server_root': 'https://login.case.edu/cas/',
         'tools.cas_auth.cas_check_path': '/Auth/CAS',
         'tools.proxy.on': True,
-
-        # Things break if you set .base to the full URL and then use script_name
-        'tools.proxy.base': 'http://vale.case.edu'
+        'tools.proxy.base': 'http://vale.case.edu/whiteboard',
+        'tools.proxy.local': ''
     }}
 
-    cherrypy.tree.mount(root=None, script_name='/whiteboard', config=core_config)
+    cherrypy.tree.mount(root=None, script_name='/', config=core_config)
 
     cherrypy.engine.signal_handler.handlers = {'SIGINT': cherrypy.engine.exit}
     cherrypy.engine.signal_handler.subscribe()

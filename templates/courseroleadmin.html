@@ -1,16 +1,19 @@
 <%inherit file="base.html"/>
-<%! import whiteboard.helpers.RoleHelper as RoleHelper %>
+<%!
+import whiteboard.helpers.RoleHelper as RoleHelper
+from whiteboard.utils import url
+%>
 <%def name="title()">Whiteboard Course Role Administration</%def>
 
 <%block name="headerAddons">
-<script type="text/javascript" src="/whiteboard/static/jquery-1.6.4.min.js"></script>
-<script type="text/javascript" src="/whiteboard/static/json2.js"></script>
-<script type="text/javascript" src="/whiteboard/static/ajaxMagic.js"></script>
+<script type="text/javascript" src="${url('/static/jquery-1.6.4.min.js')}"></script>
+<script type="text/javascript" src="${url('/static/json2.js')}"></script>
+<script type="text/javascript" src="${url('/static/ajaxMagic.js')}"></script>
 <script type="text/javascript">
 $(function() {
     $("#roleEdit").submit(function() {
         var $ajaxData = {'ajaxData': $("#roleEdit").form2json()};
-        $.post('/whiteboard/ajax/courseRoleSubmit', $ajaxData, function(data) {
+        $.post('${url('/ajax/courseRoleSubmit')}', $ajaxData, function(data) {
             $("#roleEditResult").html("<p>" + data["result"] + "</p>");
             if(data["status"] == "success") {
                 $("#roleEditResult").addClass("success");
@@ -24,7 +27,7 @@ $(function() {
     $("#roleUsername").change(function() {
         var username = $(this).val();
         var $ajaxData = {'ajaxData': JSON.stringify({'username': username, 'courseid': ${ctx['courseid']}})};
-        $.post('/whiteboard/ajax/courseRoleValidate', $ajaxData, function(data) {
+        $.post('${url('/ajax/courseRoleValidate')}', $ajaxData, function(data) {
             if(data["status"] == "success") {
                 $("#courseRoleEditor").removeClass("hidden"); 
                 $("#roleEdit > input[name|=username]").val(username);

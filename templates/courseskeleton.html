@@ -1,4 +1,5 @@
 <%inherit file="base.html" />
+<%! from whiteboard.utils import url %>
 <%def name="title()">${ctx['course']['code']} - ${ctx['course']['title']}</%def>
 
 <%block name="bodyContent">
@@ -10,9 +11,9 @@
 <hr />
 
 <div id="courseLinksHeader">
-<a href="documents/">Documents</a>
-<a href="grades">Grades</a>
-<a href="assignments">Assignments</a>
+<a href="${url('/course/%s/documents/' % ctx['course']['courseid'])}">Documents</a>
+<a href="${url('/course/%s/grades' % ctx['course']['courseid'])}">Grades</a>
+<a href="${url('/course/%s/assignments' % ctx['course']['courseid'])}">Assignments</a>
 </div>
 
 <hr />

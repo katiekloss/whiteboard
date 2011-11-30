@@ -1,15 +1,16 @@
 <%inherit file="base.html" />
+<%! from whiteboard.utils import url %>
 <%def name="title()">Add Announcement</%def>
 
 <%block name="headerAddons">
-<script type="text/javascript" src="/whiteboard/static/jquery-1.6.4.min.js"></script>
-<script type="text/javascript" src="/whiteboard/static/json2.js"></script>
-<script type="text/javascript" src="/whiteboard/static/ajaxMagic.js"></script>
+<script type="text/javascript" src="${url('/static/jquery-1.6.4.min.js')}"></script>
+<script type="text/javascript" src="${url('/static/json2.js')}"></script>
+<script type="text/javascript" src="${url('/static/ajaxMagic.js')}"></script>
 <script type="text/javascript">
 $(function() {
     $("#announcement").submit(function() {
         var $ajaxData = {'ajaxData': $("#announcement").form2json()};
-        $.post('/whiteboard/ajax/courseAddAnnouncement', $ajaxData, function(data) {
+        $.post('${url('/ajax/courseAddAnnouncement')}', $ajaxData, function(data) {
             if(data['status'] == 'success') {
                 window.location = data['redirect_url'];
             } else {
