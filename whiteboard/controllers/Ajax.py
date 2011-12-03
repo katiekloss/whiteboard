@@ -1,5 +1,6 @@
 import whiteboard.helpers.RoleHelper as RoleHelper
 import whiteboard.helpers.AnnouncementHelper as AnnouncementHelper
+import whiteboard.helpers.GradeHelper as GradeHelper
 import whiteboard.template
 import cherrypy
 import json
@@ -81,3 +82,19 @@ class Ajax:
 
         cherrypy.response.headers['Content-Type'] = 'text/json'
         return json.dumps({'status': 'success', 'redirect_url': '/whiteboard/course/%s/' % form['courseid']})
+
+    @RoleHelper.require_role('instructor, ta', 'Only instructors and TAs are permitted to use this feature.')
+    def editGrade(self, ajaxData):
+
+        cherrypy.response.headers['Content-Type'] = 'text/json'
+        form = json.loads(ajaxData)
+        try:
+            (username, assignmentid) = form['gradeId'][6:].split('_')
+            assignmentid = int(assignmentid)
+            points = int(form['points'])
+
+            GradeHelper.create_or_update_grade(assignmentid, username, points)
+
+            return json.dumps({'status': 'success'})
+        except:
+            return json.dumps({'status': 'failure'})

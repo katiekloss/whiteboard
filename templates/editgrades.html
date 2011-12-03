@@ -1,0 +1,52 @@
+<%inherit file="courseskeleton.html" />
+<%!
+import whiteboard.helpers.RoleHelper as RoleHelper
+import whiteboard.helpers.AssignmentHelper as AssignmentHelper
+import whiteboard.helpers.CourseHelper as CourseHelper
+import whiteboard.helpers.GradeHelper as GradeHelper
+from whiteboard.utils import url
+%>
+<%def name="title()">Edit Grades for ${ctx['course']['title']}</%def>
+
+<%block name="headerAddons">
+<script type="text/javascript" src="${url('/static/jquery-1.6.4.min.js')}"></script>
+<script type="text/javascript" src="${url('/static/json2.js')}"></script>
+<script type="text/javascript" src="${url('/static/ajaxMagic.js')}"></script>
+<script type="text/javascript">
+$(function() {
+    $(".gradeinput").change(function() {
+        var $ajaxData = {'ajaxData': JSON.stringify({'gradeId': this.id, 'points': this.value})};
+        var input_id = this.id;
+        $.post('${url('/ajax/editGrade')}', $ajaxData, function(data) {
+            if(data["status"] == "success") {
+                $("#" + input_id).parent().css('background-color', 'Green');
+            } else {
+                $("#" + input_id).parent().css('background-color', 'Red');
+            }
+        });
+    });
+});
+
+</script>
+</%block>
+
+<%block name="coursePageContent">
+<div id="gradeEditor">
+<table border="1">
+<tr>
+<th></th>
+% for assignment in AssignmentHelper.fetch_assignments_for_course(ctx['course']['courseid']):
+<th>${assignment['title']}</th>
+% endfor
+</tr>
+% for student in CourseHelper.fetch_users_in_role(ctx['course']['courseid'], 'student'):
+<tr>
+<td>${student['caseid']}</td>
+% for grade in GradeHelper.fetch_grades_for_course(ctx['course']['courseid'], student['caseid']):
+<td><input type="text" id="grade_${student['caseid']}_${grade['assignmentid']}" class="gradeinput" value="${grade['score'] if grade['score'] != None else ''}" /></td>
+% endfor
+</tr>
+% endfor
+</table>
+</div>
+</%block>

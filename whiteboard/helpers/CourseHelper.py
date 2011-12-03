@@ -16,3 +16,16 @@ class CourseHelper:
             if datareader.rowcount() == 0:
                 return None
             return datareader.fetch()
+
+    @staticmethod
+    def fetch_users_in_role(courseid, rolename):
+       
+        users = []
+        sql = whiteboard.sqltool.SqlTool()
+        sql.query_text = "SELECT * FROM Roles WHERE courseid = @courseid AND rolename = @rolename"
+        sql.addParameter("@courseid", courseid)
+        sql.addParameter("@rolename", rolename)
+        with sql.execute() as datareader:
+            for user in datareader:
+                users.append(user)
+        return users
