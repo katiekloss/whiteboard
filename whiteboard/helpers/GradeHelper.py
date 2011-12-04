@@ -7,7 +7,7 @@ class GradeHelper:
         
         grades = []
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = """SELECT A.assignmentid, due, points, courseid, caseid, score
+        sql.query_text = """SELECT A.assignmentid, title, due, points, courseid, caseid, score
             FROM Assignments A
             LEFT OUTER JOIN Grades G ON A.assignmentid = G.assignmentid
             AND caseid = @caseid

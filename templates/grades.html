@@ -1,5 +1,25 @@
 <%inherit file="courseskeleton.html" />
+<%!
+import cherrypy
+import whiteboard.helpers.GradeHelper as GradeHelper
+%>
+<%def name="title()">Viewing grades for ${ctx['course']['title']}</%def>
 
 <%block name="coursePageContent">
-Grades go here!
+<div id="gradeViewer">
+<table border="1">
+<tr>
+<th>Assignment Name</th>
+<th>Score</th>
+<th>Total Points</th>
+</tr>
+% for grade in GradeHelper.fetch_grades_for_course(ctx['course']['courseid'], cherrypy.session['username']):
+<tr>
+<td>${grade['title']}</td>
+<td>${grade['score'] if grade['score'] != None else ''}</td>
+<td>${grade['points']}</td>
+</tr>
+% endfor
+</table>
+</div>
 </%block>
