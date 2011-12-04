@@ -7,18 +7,21 @@ class Root:
         context = {'announcements': [], 'courses': []}
         
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = "SELECT code, title, courseid FROM CourseRegistration WHERE caseid = @caseid"
+        sql.query_text = "SELECT DISTINCT code, title, courseid FROM CourseRegistration WHERE caseid = @caseid"
         sql.addParameter("@caseid", cherrypy.session['username'])
         with sql.execute() as datareader:
             for row in datareader:
                 context['courses'].append(row)
 
-        sql.query_text = """SELECT A.date, A.content, A.caseid, C.code
-        FROM Announcements A, Courses C, CourseRegistration R
-        WHERE A.courseid = C.courseid
-        AND R.courseid = C.courseid
-        AND R.caseid = @caseid
-        AND A.date > (NOW()::date - '1 week'::interval)::date;"""
+        sql.query_text = """SELECT A.date, A.content, A.caseid, R.code
+        FROM Announcements A
+        JOIN
+        (
+            SELECT DISTINCT code, title, courseid
+            FROM CourseRegistration
+            WHERE caseid = @caseid
+        ) AS R ON A.courseid = R.courseid
+        WHERE A.date > (NOW()::date - '1 week'::interval)::date;"""
         sql.addParameter("@caseid", cherrypy.session['username'])
         with sql.execute() as datareader:
             for row in datareader:
