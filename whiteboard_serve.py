@@ -35,7 +35,9 @@ def create_routes():
 
     dispatcher.connect('editGrades', '/course/{courseid}/editGrades', controller=Grades(), action='editGrades')
     dispatcher.connect('ajaxEditGrade', '/ajax/editGrade', controller=Ajax(), action='editGrade')
-    
+   
+    dispatcher.connect('assignmentResponse', '/course/{courseid}/assignmentresponse/{assignmentid}', controller=Assignments(), action='assignmentResponse', conditions=dict(method=['GET']))
+    dispatcher.connect('assignmentResponsePOST', '/course/{courseid}/assignmentresponse/{assignmentid}', controller=Assignments(), action='assignmentResponse_POST', conditions=dict(method=['POST']))
     # ROUTES END HERE
 
     return dispatcher

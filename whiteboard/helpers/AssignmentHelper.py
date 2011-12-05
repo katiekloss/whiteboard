@@ -14,3 +14,12 @@ class AssignmentHelper:
                 assignments.append(row)
 
         return assignments
+
+    @staticmethod
+    def fetch_assignment(assignmentid):
+        
+        sql = whiteboard.sqltool.SqlTool()
+        sql.query_text = "SELECT * FROM Assignments WHERE assignmentid=@assignmentid"
+        sql.addParameter("@assignmentid", assignmentid)
+        with sql.execute() as datareader:
+           return datareader.fetch() 

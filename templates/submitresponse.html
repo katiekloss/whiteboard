@@ -1,0 +1,12 @@
+<%inherit file="courseskeleton.html" />
+<%def name="title()">Respond to assignment</%def>
+
+<%block name="coursePageContent">
+<div id="assignmentResponse">
+Response for assignment "<b>${ctx['assignment']['title']}</b>":
+<form id="frmAssignmentResponse" method="POST" enctype="multipart/form-data">
+    Response File: <input type="file" name="upload" /><br />
+    <input type="submit" value="Submit Response" />
+</form>
+</div>
+</%block>
