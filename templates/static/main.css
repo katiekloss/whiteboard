@@ -30,6 +30,7 @@ div#courseLinksHeader
 {
     position: absolute;
     bottom: 0;
+    left: 5;
 }
 
 .hidden

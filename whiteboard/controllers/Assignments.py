@@ -22,8 +22,13 @@ class Assignments:
 
     @RoleHelper.require_role('instructor', 'Only instructors are permitted to create assignments')
     def createAssignment(self, courseid):
-        
-        return whiteboard.template.render('createassignment.html', context_dict={'courseid': courseid})
+ 
+        ctx = {'course': CourseHelper.fetch_course(courseid)}
+        if ctx['course'] == None:
+            return whiteboard.template.render('error.html', context_dict =
+                {'error': 'The specified course does not exist'})
+       
+        return whiteboard.template.render('createassignment.html', context_dict=ctx)
 
     @RoleHelper.require_role('instructor', 'Only instructors are permitted to create assignments')
     def createAssignment_POST(self, courseid, title, duedate, points):

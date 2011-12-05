@@ -1,5 +1,8 @@
 <%inherit file="base.html" />
-<%! from whiteboard.utils import url %>
+<%!
+from whiteboard.utils import url
+import whiteboard.helpers.RoleHelper as RoleHelper
+%>
 <%def name="title()">${ctx['course']['code']} - ${ctx['course']['title']}</%def>
 
 <%block name="bodyContent">
@@ -20,4 +23,16 @@
 
 <%block name="coursePageContent" />
 
+<div class="footer">
+
+% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
+<a href="roleadmin">Manage Roles</a>
++ <a href="createassignment">Create an Assignment</a>
+% endif
+% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor, ta'):
++ <a href="addAnnouncement">Create an Announcement</a>
++ <a href="addDocument">Upload a Document</a>
++ <a href="editGrades">Edit Grades</a>
+% endif
+</div>
 </%block>

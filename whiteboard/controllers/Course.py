@@ -26,10 +26,20 @@ class Course:
     def courseRoleAdmin(self, courseid):
         """Render the roleadmin view"""
 
-        return whiteboard.template.render('courseroleadmin.html', context_dict = {'courseid': courseid})
+        ctx = {'course': CourseHelper.fetch_course(courseid)}
+        if ctx['course'] == None:
+            errorctx = {'error': 'The specified course (ID %s) does not exist' % courseid}
+            return whiteboard.template.render('error.html', context_dict=errorctx)
+
+        return whiteboard.template.render('courseroleadmin.html', context_dict = ctx)
 
     @RoleHelper.require_role('instructor,ta', 'Only instructors and TAs are permitted to edit roles')
     def addAnnouncement(self, courseid):
         """Render announcement creation page"""
 
-        return whiteboard.template.render('courseaddannouncement.html', context_dict = {'courseid': courseid})
+        ctx = {'course': CourseHelper.fetch_course(courseid)}
+        if ctx['course'] == None:
+            errorctx = {'error': 'The specified course (ID %s) does not exist' % courseid}
+            return whiteboard.template.render('error.html', context_dict=errorctx)
+
+        return whiteboard.template.render('courseaddannouncement.html', context_dict = ctx)

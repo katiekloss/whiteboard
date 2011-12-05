@@ -1,5 +1,4 @@
 <%inherit file="courseskeleton.html" />
-<%! import whiteboard.helpers.RoleHelper as RoleHelper %>
 
 <%block name="coursePageContent">
 <div id="courseAnnouncements">
@@ -8,16 +7,5 @@
 <li>${announcement['date']} - ${announcement['caseid']}: ${announcement['content']}</li>
 % endfor
 </ul>
-</div>
-
-<div class="footer">
-% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
-<a href="roleadmin">Manage Roles</a>
-% endif
-% if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor, ta'):
-+ <a href="addAnnouncement">Create an Announcement</a>
-+ <a href="addDocument">Upload a Document</a>
-+ <a href="editGrades">Edit Grades</a>
-% endif
 </div>
 </%block>

@@ -1,4 +1,4 @@
-<%inherit file="base.html"/>
+<%inherit file="courseskeleton.html"/>
 <%!
 import whiteboard.helpers.RoleHelper as RoleHelper
 from whiteboard.utils import url
@@ -26,12 +26,12 @@ $(function() {
 $(function() {
     $("#roleUsername").change(function() {
         var username = $(this).val();
-        var $ajaxData = {'ajaxData': JSON.stringify({'username': username, 'courseid': ${ctx['courseid']}})};
+        var $ajaxData = {'ajaxData': JSON.stringify({'username': username, 'courseid': ${ctx['course']['courseid']}})};
         $.post('${url('/ajax/courseRoleValidate')}', $ajaxData, function(data) {
             if(data["status"] == "success") {
                 $("#courseRoleEditor").removeClass("hidden"); 
                 $("#roleEdit > input[name|=username]").val(username);
-                $("#roleEdit > input[name|=courseid]}").val(${ctx['courseid']});
+                $("#roleEdit > input[name|=courseid]}").val(${ctx['course']['courseid']});
             }
         });
     });
@@ -40,7 +40,7 @@ $(function() {
 </script>
 </%block>
 
-<%block name="bodyContent">
+<%block name="coursePageContent">
 <p>User to edit: <input id="roleUsername" type="text" /></p>
 
 <div id="courseRoleEditor" class="hidden">

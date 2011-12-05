@@ -24,7 +24,7 @@ class Documents:
     @RoleHelper.require_role('instructor,ta', 'You must be an instructor or TA to upload documents')
     def addDocument(self, courseid, name=None, upload=None):
 
-        ctx = {'courseid': courseid}
+        ctx = {'course': CourseHelper.fetch_course(courseid)}
         if cherrypy.request.method == "GET":
             return whiteboard.template.render('addDocument.html', context_dict=ctx)
 

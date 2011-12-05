@@ -1,4 +1,4 @@
-<%inherit file="base.html" />
+<%inherit file="courseskeleton.html" />
 <%! from whiteboard.utils import url %>
 <%def name="title()">Add Announcement</%def>
 
@@ -25,10 +25,10 @@ $(function() {
 
 </%block>
 
-<%block name="bodyContent">
+<%block name="coursePageContent">
 <div id="courseAnnouncementEditor">
 <form id="announcement" action="#" method="POST">
-    <input type="hidden" name="courseid" value="${ctx['courseid']}" />
+    <input type="hidden" name="courseid" value="${ctx['course']['courseid']}" />
     Announcement content: <br /><textarea name="content" rows="5" cols="50" ></textarea><br />
     <input type="submit" value="Create Announcement" />
 </form>
