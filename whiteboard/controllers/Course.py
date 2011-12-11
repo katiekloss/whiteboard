@@ -4,6 +4,7 @@ import whiteboard.template
 import whiteboard.helpers.CourseHelper as CourseHelper
 import whiteboard.helpers.AnnouncementHelper as AnnouncementHelper
 import whiteboard.helpers.RoleHelper as RoleHelper
+from whiteboard.utils import url
 
 class Course:
     """Controller for all /course/* URLS"""
@@ -43,3 +44,26 @@ class Course:
             return whiteboard.template.render('error.html', context_dict=errorctx)
 
         return whiteboard.template.render('courseaddannouncement.html', context_dict = ctx)
+
+    @RoleHelper.require_role('instructor', 'Only instructors have access to this tool')
+    def bulkRoleAdd(self, courseid):
+        
+        ctx = {'course': CourseHelper.fetch_course(courseid)}
+        if ctx['course'] == None:
+            errorctx = {'error': 'The specified course (ID %s) does not exist' % courseid}
+            return whiteboard.template.render('error.html', context_dict=errorctx)
+   
+        return whiteboard.template.render('bulkroleadd.html', context_dict=ctx)
+
+    @RoleHelper.require_role('instructor', 'Only instructors have access to this tool')
+    def bulkRoleAdd_POST(self, courseid, users, roles = []):
+        users = [x.strip() for x in users.strip().split('\n')]
+
+        # I'm just going to pretend that I never wrote this
+        if(type(roles) != list):
+            roles = roles.split(' ')
+        
+        for user in users:
+            for role in roles:
+                RoleHelper.grant_user_role(user, courseid, role)
+        raise cherrypy.HTTPRedirect(url('/course/%s/' % courseid))

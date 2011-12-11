@@ -41,6 +41,9 @@ def create_routes():
 
     dispatcher.connect('createCourseGET', '/createCourse', controller=Root(), action='createCourse', conditions=dict(method=['GET']))
     dispatcher.connect('createCoursePOST', '/createCourse', controller=Root(), action='createCourse_POST', conditions=dict(method=['POST']))
+
+    dispatcher.connect('bulkRoleAddGET', '/course/{courseid}/bulkRoleAdd', controller=Course(), action='bulkRoleAdd', conditions=dict(method=['GET']))
+    dispatcher.connect('bulkRoleAddPOST', '/course/{courseid}/bulkRoleAdd', controller=Course(), action='bulkRoleAdd_POST', conditions=dict(method=['POST']))
     # ROUTES END HERE
 
     return dispatcher

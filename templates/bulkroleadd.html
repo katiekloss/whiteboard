@@ -1,0 +1,18 @@
+<%inherit file="courseskeleton.html" />
+<%!
+import whiteboard.helpers.RoleHelper as RoleHelper
+%>
+
+<%block name="coursePageContent">
+<form id="bulkRoleAdd" method="POST">
+<p>Enter the usernames of users to grant this role to, one per line:</p>
+<textarea name="users" rows="5" cols="7"></textarea>
+<p>Roles to add:</p>
+<p>
+% for role in RoleHelper.course_role_names:
+<input type="checkbox" name="roles" value="${role}">${role}</input><br />
+% endfor
+</p>
+<input type="submit" value="Perform Bulk Add" />
+</form>
+</%block>

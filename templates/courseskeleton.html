@@ -28,6 +28,7 @@ import whiteboard.helpers.RoleHelper as RoleHelper
 % if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
 <a href="roleadmin">Manage Roles</a>
 + <a href="createassignment">Create an Assignment</a>
++ <a href="bulkRoleAdd">Add Roles in Bulk</a>
 % endif
 % if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor, ta'):
 + <a href="addAnnouncement">Create an Announcement</a>
