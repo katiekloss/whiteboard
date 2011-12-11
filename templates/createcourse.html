@@ -1,0 +1,13 @@
+<%inherit file="base.html" />
+
+<%def name="title()">Create Course</%def>
+
+<%block name="bodyContent">
+<form id="courseCreator" method="POST">
+    <p>Course title: <input type="text" name="coursetitle" placeholder="Calculus I" /></p>
+    <p>Course code: <input type="text" name="coursecode" placeholder="MATH121" /></p>
+    <p>Course term: <input type="text" name="courseterm" placeholder="spring2011" /></p>
+    <p>Course instructor: <input type="text" name="courseinstructor" placeholder="abc123" /></p>
+    <p><input type="submit" value="Create course" /></p>
+</form>
+</%block>

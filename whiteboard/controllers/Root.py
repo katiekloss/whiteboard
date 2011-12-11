@@ -1,5 +1,8 @@
 import whiteboard.template
 import whiteboard.sqltool
+import whiteboard.helpers.RoleHelper as RoleHelper
+import whiteboard.helpers.CourseHelper as CourseHelper
+from whiteboard.utils import url
 import cherrypy
 
 class Root:
@@ -28,3 +31,16 @@ class Root:
                 context['announcements'].append(row)
 
         return whiteboard.template.render('index.html', context_dict=context)
+
+    @RoleHelper.require_role('siteroleadmin', 'Only site administrators can use this tool')
+    def createCourse(self):
+        
+        return whiteboard.template.render('createcourse.html')
+
+    @RoleHelper.require_role('siteroleadmin', 'Only site administrators can use this tool')
+    def createCourse_POST(self, coursetitle, coursecode, courseterm, courseinstructor):
+
+        new_course_id = CourseHelper.create_course(coursetitle, coursecode, courseterm)
+        RoleHelper.grant_user_role(courseinstructor, new_course_id, 'instructor')
+
+        raise cherrypy.HTTPRedirect(url('/course/%i/' % new_course_id))

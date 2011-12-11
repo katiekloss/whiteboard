@@ -4,6 +4,19 @@ class CourseHelper:
     """Helper for course-related functionality"""
 
     @staticmethod
+    def create_course(title, code, term):
+        
+        sql = whiteboard.sqltool.SqlTool()
+        sql.query_text = "INSERT INTO Courses (title, code, term) VALUES (@title, @code, @term)"
+        sql.addParameter("@title", title)
+        sql.addParameter("@code", code)
+        sql.addParameter("@term", term)
+        sql.execute()
+        sql.query_text = "SELECT LASTVAL() AS id"
+        with sql.execute() as datareader:
+            return datareader.fetch()['id']
+
+    @staticmethod
     def fetch_course(courseid):
         """Returns the Course corresponding to the given courseid
         or None if the course does not exist.

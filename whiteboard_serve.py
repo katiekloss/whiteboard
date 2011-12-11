@@ -38,6 +38,9 @@ def create_routes():
    
     dispatcher.connect('assignmentResponse', '/course/{courseid}/assignmentresponse/{assignmentid}', controller=Assignments(), action='assignmentResponse', conditions=dict(method=['GET']))
     dispatcher.connect('assignmentResponsePOST', '/course/{courseid}/assignmentresponse/{assignmentid}', controller=Assignments(), action='assignmentResponse_POST', conditions=dict(method=['POST']))
+
+    dispatcher.connect('createCourseGET', '/createCourse', controller=Root(), action='createCourse', conditions=dict(method=['GET']))
+    dispatcher.connect('createCoursePOST', '/createCourse', controller=Root(), action='createCourse_POST', conditions=dict(method=['POST']))
     # ROUTES END HERE
 
     return dispatcher

@@ -2,6 +2,8 @@ import whiteboard.sqltool
 import cherrypy
 import psycopg2
 
+from functools import wraps
+
 class RoleHelper:
     """Class for handling role-related functionality"""
 
@@ -30,6 +32,7 @@ class RoleHelper:
     @staticmethod
     def require_role(rolename, error):
         def _decorator(function):
+            @wraps(function)
             def _called(*args, **kwargs):
                 if kwargs.has_key('courseid'):
                     if RoleHelper.current_user_has_role(kwargs['courseid'], rolename):
