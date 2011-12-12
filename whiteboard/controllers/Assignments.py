@@ -22,7 +22,7 @@ class Assignments:
         sql = whiteboard.sqltool.SqlTool()
         sql.query_text = """SELECT * FROM Assignments A LEFT OUTER JOIN
         (
-            SELECT * FROM Documents WHERE name LIKE 'assignment_%%'
+            SELECT * FROM Documents WHERE type = 'assignment' 
         ) AS D
         ON A.assignmentid = D.assignmentid
         WHERE A.courseid = @courseid"""
@@ -74,7 +74,7 @@ class Assignments:
             path = "files/%s/assignments/" % courseid
             ext = os.path.splitext(upload.filename)[1]
             new_name = "assignment_%s%s" % (assignment_id, ext)
-            document_id = DocumentHelper.create_file(new_name, path, courseid, assignment_id)
+            document_id = DocumentHelper.create_file(new_name, path, courseid, assignment_id, 'assignment')
             
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -111,7 +111,7 @@ class Assignments:
 
         sql = whiteboard.sqltool.SqlTool()
         try:
-            sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid) VALUES (False, @name, @path, @courseid, @assignmentid)"
+            sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid, type) VALUES (False, @name, @path, @courseid, @assignmentid, 'response')"
             sql.addParameter("@name", new_name)
             sql.addParameter("@path", path)
             sql.addParameter("@courseid", courseid)

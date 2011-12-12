@@ -3,18 +3,19 @@ import whiteboard.sqltool
 class DocumentHelper:
 
     @staticmethod
-    def create_file(name, path, courseid, assignmentid):
+    def create_file(name, path, courseid, assignmentid, type):
         
         sql = whiteboard.sqltool.SqlTool()
         try:
             if assignmentid != None:
-                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid) VALUES (False, @name, @path, @courseid, @assignmentid)"
+                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid, type) VALUES (False, @name, @path, @courseid, @assignmentid, @type)"
                 sql.addParameter("@assignmentid", assignmentid)
             else:
-                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid) VALUES (False, @name, @path, @courseid)"
+                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, type) VALUES (False, @name, @path, @courseid, @type)"
             sql.addParameter("@name", name)
             sql.addParameter("@path", path)
             sql.addParameter("@courseid", courseid)
+            sql.addParameter("@type", type)
             sql.execute()
             sql.query_text = "SELECT LASTVAL() as id"
             with sql.execute() as datareader:
@@ -36,8 +37,8 @@ class DocumentHelper:
     @staticmethod
     def get_files_for_course(courseid):
         sql = whiteboard.sqltool.SqlTool()
-        # TODO: HACK, but one that we can only fix via a pretty big schema update...
-        sql.query_text = "SELECT * FROM Documents WHERE courseid = @courseid AND name NOT LIKE 'response_%%' AND name NOT LIKE 'assignment_%%'"
+        
+        sql.query_text = "SELECT * FROM Documents WHERE courseid = @courseid AND type = 'document'"
         sql.addParameter("@courseid", courseid)
 
         documents = []

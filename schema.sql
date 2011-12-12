@@ -4,6 +4,12 @@
 ---
 
 ---
+--- Types
+---
+
+CREATE TYPE doctype AS ENUM('assignment', 'response', 'document');
+
+---
 --- Tables
 ---
 
@@ -64,7 +70,7 @@ CREATE TABLE Documents (
     courseid integer NOT NULL,
     assignmentid integer,
     parent integer,
-
+    type doctype NOT NULL
 
     PRIMARY KEY (documentid),
     FOREIGN KEY (courseid) REFERENCES Courses ON DELETE CASCADE,

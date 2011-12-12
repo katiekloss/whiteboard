@@ -33,7 +33,7 @@ class Documents:
 
             sql = whiteboard.sqltool.SqlTool()
             try:
-                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid) VALUES (False, @name, @path, @courseid)"
+                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, type) VALUES (False, @name, @path, @courseid, 'document')"
                 sql.addParameter("@name", upload.filename)
                 sql.addParameter("@path", path)
                 sql.addParameter("@courseid", courseid)
