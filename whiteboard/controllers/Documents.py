@@ -34,17 +34,20 @@ class Documents:
             sql = whiteboard.sqltool.SqlTool()
             try:
                 sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, type) VALUES (False, @name, @path, @courseid, 'document')"
-                sql.addParameter("@name", upload.filename)
+                sql.addParameter("@name", name)
                 sql.addParameter("@path", path)
                 sql.addParameter("@courseid", courseid)
                 sql.execute()
+                sql.query_text = "SELECT LASTVAL() AS id"
+                with sql.execute() as datareader:
+                    document_id = datareader.fetch()['id']
             except:
                 sql.rollback = True
                 raise
 
             if not os.path.exists(path):
                 os.makedirs(path)
-            with open(path + upload.filename, "wb") as permanent:
+            with open(path + str(document_id), "wb") as permanent:
                 while True:
                     data = upload.file.read(8192)
                     if not data:
@@ -58,7 +61,7 @@ class Documents:
         if file == None:
             raise cherrypy.HTTPError(404)
 
-        path = ''.join((file['path'], file['name']))
+        path = file['path'] + str(file['documentid'])
         try:
             cherrypy.response.headers['Content-Type'] = mimetypes.guess_type(path)[0]
             cherrypy.response.headers['Content-Disposition'] = "attachment; filename=%s" % file['name']

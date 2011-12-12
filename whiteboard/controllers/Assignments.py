@@ -70,15 +70,13 @@ class Assignments:
             sql.rollback = True
             raise
 
-        if upload != None:
+        if upload.file != None:
             path = "files/%s/assignments/" % courseid
-            ext = os.path.splitext(upload.filename)[1]
-            new_name = "assignment_%s%s" % (assignment_id, ext)
-            document_id = DocumentHelper.create_file(new_name, path, courseid, assignment_id, 'assignment')
+            document_id = DocumentHelper.create_file(title, path, courseid, assignment_id, 'assignment')
             
             if not os.path.exists(path):
                 os.makedirs(path)
-            with open(path + new_name, "wb") as output:
+            with open(path + str(document_id), "wb") as output:
                 while True:
                     data = upload.file.read(8192)
                     if not data:
@@ -106,24 +104,25 @@ class Assignments:
             return whiteboard.template.render('error.html', context_dict = {'error': 'The specified course does not exist'})
 
         path = "files/%s/responses/" % courseid
-        extension = os.path.splitext(upload.filename)[1]
-        new_name = "response_%s_%s%s" % (cherrypy.session['username'], assignmentid, extension)
 
         sql = whiteboard.sqltool.SqlTool()
         try:
             sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid, type) VALUES (False, @name, @path, @courseid, @assignmentid, 'response')"
-            sql.addParameter("@name", new_name)
+            sql.addParameter("@name", "response_%s_%s" % (cherrypy.session['username'], assignmentid))
             sql.addParameter("@path", path)
             sql.addParameter("@courseid", courseid)
             sql.addParameter("@assignmentid", assignmentid)
             sql.execute()
+            sql.query_text = "SELECT LASTVAL() AS id"
+            with sql.execute() as datareader:
+                document_id = datareader.fetch()['id']
         except:
             sql.rollback = True
             raise
 
         if not os.path.exists(path):
             os.makedirs(path)
-        with open(path + new_name, "wb") as output:
+        with open(path + str(document_id), "wb") as output:
             while True:
                 data = upload.file.read(8192)
                 if not data:
