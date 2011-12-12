@@ -32,7 +32,8 @@ class DocumentHelper:
     @staticmethod
     def get_files_for_course(courseid):
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = "SELECT * FROM Documents WHERE courseid = @courseid"
+        # TODO: HACK, but one that we can only fix via a pretty big schema update...
+        sql.query_text = "SELECT * FROM Documents WHERE courseid = @courseid AND name NOT LIKE 'response_%%' AND name NOT LIKE 'assignment_%%'"
         sql.addParameter("@courseid", courseid)
 
         documents = []
