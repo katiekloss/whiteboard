@@ -14,6 +14,9 @@ class SqlTool:
            print row['username']
     """
 
+    #: Specifies whether this connection is to roll back (request processing hit an error, etc)
+    rollback = False
+
     #: Stores the text of the next SQL query to be executed
     query_text = None
 
@@ -23,13 +26,16 @@ class SqlTool:
     #: SqlTool Constructor
     def __init__(self):
         self.__dbconn = psycopg2.connect(cherrypy.config['db_connstring'])
-    
+
     def __del__(self):
         try:
-            self.__dbconn.commit()
-            self.__dbconn.close()
+            if not self.rollback:
+                self.__dbconn.commit()
+            else:
+                self.__dbconn.rollback()
         except:
-            pass
+            raise
+        self.__dbconn.close()
 
     def addParameter(self, param_name, param_value):
         """Adds a named parameter to a previously-set query.

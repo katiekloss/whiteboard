@@ -21,9 +21,13 @@ class AnnouncementHelper:
         """Adds a new announcement to a course"""
 
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = """INSERT INTO Announcements (date, content, courseid, caseid)
-            VALUES (NOW()::date, @content, @courseid, @caseid)"""
-        sql.addParameter("@content", content)
-        sql.addParameter("@courseid", courseid)
-        sql.addParameter("@caseid", username)
-        sql.execute()
+        try:
+            sql.query_text = """INSERT INTO Announcements (date, content, courseid, caseid)
+                VALUES (NOW()::date, @content, @courseid, @caseid)"""
+            sql.addParameter("@content", content)
+            sql.addParameter("@courseid", courseid)
+            sql.addParameter("@caseid", username)
+            sql.execute()
+        except:
+            sql.rollback = True
+            raise

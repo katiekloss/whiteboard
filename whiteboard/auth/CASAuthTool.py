@@ -9,19 +9,23 @@ def database_trigger(username, cas_ticket):
     """
 
     sql = whiteboard.sqltool.SqlTool()
-    sql.query_text = "SELECT * FROM Users WHERE caseid=@caseid;"
-    sql.addParameter("@caseid", username)
-    with sql.execute() as datareader:
-        if datareader.rowcount() == 0:
-            sql.query_text = "INSERT INTO Users VALUES (@caseid)"
-            sql.addParameter("@caseid", username)
-            sql.execute()
+    try:
+        sql.query_text = "SELECT * FROM Users WHERE caseid=@caseid;"
+        sql.addParameter("@caseid", username)
+        with sql.execute() as datareader:
+            if datareader.rowcount() == 0:
+                sql.query_text = "INSERT INTO Users VALUES (@caseid)"
+                sql.addParameter("@caseid", username)
+                sql.execute()
 
-    sql.query_text = "INSERT INTO LoginLog VALUES (NOW(), @caseid, @ip_addr, @ticket);"
-    sql.addParameter("@caseid", username)
-    sql.addParameter("@ip_addr", cherrypy.request.remote.ip)
-    sql.addParameter("@ticket", cas_ticket)
-    sql.execute()
+        sql.query_text = "INSERT INTO LoginLog VALUES (NOW(), @caseid, @ip_addr, @ticket);"
+        sql.addParameter("@caseid", username)
+        sql.addParameter("@ip_addr", cherrypy.request.remote.ip)
+        sql.addParameter("@ticket", cas_ticket)
+        sql.execute()
+    except:
+        sql.rollback = True
+        raise
 
 def auth_handler(cas_server_root, cas_check_path):
 

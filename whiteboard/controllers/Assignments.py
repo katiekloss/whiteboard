@@ -49,22 +49,26 @@ class Assignments:
             raise cherrypy.HTTPRedirect("createassignment")
 
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = "INSERT INTO Assignments (title, due, points, courseid) VALUES (@title, @duedate, @points, @courseid); SELECT LASTVAL() AS id;"
-        sql.addParameter("@title", title)
-        sql.addParameter("@duedate", duedate)
-        sql.addParameter("@points", points)
-        sql.addParameter("@courseid", courseid)
-        with sql.execute() as datareader:
-            assignment_id = datareader.fetch()['id']
+        try:
+            sql.query_text = "INSERT INTO Assignments (title, due, points, courseid) VALUES (@title, @duedate, @points, @courseid); SELECT LASTVAL() AS id;"
+            sql.addParameter("@title", title)
+            sql.addParameter("@duedate", duedate)
+            sql.addParameter("@points", points)
+            sql.addParameter("@courseid", courseid)
+            with sql.execute() as datareader:
+                assignment_id = datareader.fetch()['id']
         
-        # TODO: This is painfully distasteful (and that's an understatement)
+            # TODO: This is painfully distasteful (and that's an understatement)
 
-        # Basically, the DocumentHelper instance later on (if one exists) uses a second DB
-        # connection which is isolated at READ COMMITTED, and we don't commit
-        # until the first SqlTool disconnects, so this assignment won't exist in time
-        # to create a Document referencing it unless we force a commit
-        sql.query_text = "COMMIT"
-        sql.execute()
+            # Basically, the DocumentHelper instance later on (if one exists) uses a second DB
+            # connection which is isolated at READ COMMITTED, and we don't commit
+            # until the first SqlTool disconnects, so this assignment won't exist in time
+            # to create a Document referencing it unless we force a commit
+            sql.query_text = "COMMIT"
+            sql.execute()
+        except:
+            sql.rollback = True
+            raise
 
         if upload != None:
             path = "files/%s/assignments/" % courseid
@@ -104,13 +108,19 @@ class Assignments:
         path = "files/%s/responses/" % courseid
         extension = os.path.splitext(upload.filename)[1]
         new_name = "response_%s_%s%s" % (cherrypy.session['username'], assignmentid, extension)
+
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid) VALUES (False, @name, @path, @courseid, @assignmentid)"
-        sql.addParameter("@name", new_name)
-        sql.addParameter("@path", path)
-        sql.addParameter("@courseid", courseid)
-        sql.addParameter("@assignmentid", assignmentid)
-        sql.execute()
+        try:
+            sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid) VALUES (False, @name, @path, @courseid, @assignmentid)"
+            sql.addParameter("@name", new_name)
+            sql.addParameter("@path", path)
+            sql.addParameter("@courseid", courseid)
+            sql.addParameter("@assignmentid", assignmentid)
+            sql.execute()
+        except:
+            sql.rollback = True
+            raise
+
         if not os.path.exists(path):
             os.makedirs(path)
         with open(path + new_name, "wb") as output:

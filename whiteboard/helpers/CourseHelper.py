@@ -7,14 +7,18 @@ class CourseHelper:
     def create_course(title, code, term):
         
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = "INSERT INTO Courses (title, code, term) VALUES (@title, @code, @term)"
-        sql.addParameter("@title", title)
-        sql.addParameter("@code", code)
-        sql.addParameter("@term", term)
-        sql.execute()
-        sql.query_text = "SELECT LASTVAL() AS id"
-        with sql.execute() as datareader:
-            return datareader.fetch()['id']
+        try:
+            sql.query_text = "INSERT INTO Courses (title, code, term) VALUES (@title, @code, @term)"
+            sql.addParameter("@title", title)
+            sql.addParameter("@code", code)
+            sql.addParameter("@term", term)
+            sql.execute()
+            sql.query_text = "SELECT LASTVAL() AS id"
+            with sql.execute() as datareader:
+                return datareader.fetch()['id']
+        except:
+            sql.rollback = True
+            raise
 
     @staticmethod
     def fetch_course(courseid):

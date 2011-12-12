@@ -30,12 +30,18 @@ class Documents:
 
         elif cherrypy.request.method == "POST":
             path = "files/%s/" % courseid
+
             sql = whiteboard.sqltool.SqlTool()
-            sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid) VALUES (False, @name, @path, @courseid)"
-            sql.addParameter("@name", upload.filename)
-            sql.addParameter("@path", path)
-            sql.addParameter("@courseid", courseid)
-            sql.execute()
+            try:
+                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid) VALUES (False, @name, @path, @courseid)"
+                sql.addParameter("@name", upload.filename)
+                sql.addParameter("@path", path)
+                sql.addParameter("@courseid", courseid)
+                sql.execute()
+            except:
+                sql.rollback = True
+                raise
+
             if not os.path.exists(path):
                 os.makedirs(path)
             with open(path + upload.filename, "wb") as permanent:

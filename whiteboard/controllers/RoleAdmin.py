@@ -1,8 +1,6 @@
 import whiteboard.helpers.RoleHelper as RoleHelper
 import whiteboard.template
-import whiteboard.sqltool
 import cherrypy
-import json
 
 class RoleAdmin:
     """Controller for role editing pages (particularly site and course roles)"""

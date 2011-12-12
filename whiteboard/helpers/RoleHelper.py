@@ -54,15 +54,19 @@ class RoleHelper:
         """
 
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = "INSERT INTO Roles VALUES (@caseid, @courseid, @rolename);"
-        sql.addParameter("@caseid", username)
-        sql.addParameter("@courseid", courseid)
-        sql.addParameter("@rolename", role)
         try:
-            sql.execute()
-        except psycopg2.IntegrityError:
-            # Ignore cases where role is already granted
-            pass
+            sql.query_text = "INSERT INTO Roles VALUES (@caseid, @courseid, @rolename);"
+            sql.addParameter("@caseid", username)
+            sql.addParameter("@courseid", courseid)
+            sql.addParameter("@rolename", role)
+            try:
+                sql.execute()
+            except psycopg2.IntegrityError:
+                # Ignore cases where role is already granted
+                pass
+        except:
+            sql.rollback = True
+            raise
 
     @staticmethod
     def revoke_user_role(username, courseid, role):
@@ -71,10 +75,14 @@ class RoleHelper:
         """
 
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = """DELETE FROM Roles WHERE caseid = @caseid
-            AND courseid = @courseid
-            AND rolename = @rolename;"""
-        sql.addParameter("@caseid", username)
-        sql.addParameter("@courseid", courseid)
-        sql.addParameter("@rolename", role)
-        sql.execute()
+        try:
+            sql.query_text = """DELETE FROM Roles WHERE caseid = @caseid
+                AND courseid = @courseid
+                AND rolename = @rolename;"""
+            sql.addParameter("@caseid", username)
+            sql.addParameter("@courseid", courseid)
+            sql.addParameter("@rolename", role)
+            sql.execute()
+        except:
+            sql.rollback = True
+            raise

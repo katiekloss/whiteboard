@@ -1,5 +1,4 @@
 import cherrypy
-import whiteboard.sqltool
 import whiteboard.template
 import whiteboard.helpers.CourseHelper as CourseHelper
 import whiteboard.helpers.AnnouncementHelper as AnnouncementHelper

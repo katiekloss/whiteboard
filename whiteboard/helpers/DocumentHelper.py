@@ -6,18 +6,22 @@ class DocumentHelper:
     def create_file(name, path, courseid, assignmentid):
         
         sql = whiteboard.sqltool.SqlTool()
-        if assignmentid != None:
-            sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid) VALUES (False, @name, @path, @courseid, @assignmentid)"
-            sql.addParameter("@assignmentid", assignmentid)
-        else:
-            sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid) VALUES (False, @name, @path, @courseid)"
-        sql.addParameter("@name", name)
-        sql.addParameter("@path", path)
-        sql.addParameter("@courseid", courseid)
-        sql.execute()
-        sql.query_text = "SELECT LASTVAL() as id"
-        with sql.execute() as datareader:
-            return datareader.fetch()['id']
+        try:
+            if assignmentid != None:
+                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid) VALUES (False, @name, @path, @courseid, @assignmentid)"
+                sql.addParameter("@assignmentid", assignmentid)
+            else:
+                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid) VALUES (False, @name, @path, @courseid)"
+            sql.addParameter("@name", name)
+            sql.addParameter("@path", path)
+            sql.addParameter("@courseid", courseid)
+            sql.execute()
+            sql.query_text = "SELECT LASTVAL() as id"
+            with sql.execute() as datareader:
+                return datareader.fetch()['id']
+        except:
+            sql.rollback = True
+            raise
         
     @staticmethod
     def get_file(documentid):
