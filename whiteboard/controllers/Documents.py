@@ -55,6 +55,7 @@ class Documents:
         path = ''.join((file['path'], file['name']))
         try:
             cherrypy.response.headers['Content-Type'] = mimetypes.guess_type(path)[0]
+            cherrypy.response.headers['Content-Disposition'] = "attachment; filename=%s" % file['name']
             return open(path)
         except IOError:
             raise
