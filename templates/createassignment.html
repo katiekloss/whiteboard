@@ -2,10 +2,11 @@
 <%def name="title()">Create Assignment</%def>
 
 <%block name="coursePageContent">
-<form id="assignmentForm" method="POST">
+<form id="assignmentForm" method="POST" enctype="multipart/form-data">
     Assignment name: <input type="text" name="title" /><br />
     Due date: <input type="text" name="duedate" /><br />
     Total points: <input type="text" name="points" /><br />
+    Assignment file: <input type="file" name="upload" /><br />
     <input type="submit" value="Create Assignment" />
 </form>
 </%block>
