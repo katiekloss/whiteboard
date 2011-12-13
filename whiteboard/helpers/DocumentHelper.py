@@ -3,25 +3,6 @@ import whiteboard.sqltool
 class DocumentHelper:
 
     @staticmethod
-    def create_file(name, path, courseid, assignmentid, type):
-        
-        sql = whiteboard.sqltool.SqlTool()
-        try:
-            if assignmentid != None:
-                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid, type) VALUES (False, @name, @path, @courseid, @assignmentid, @type)"
-                sql.addParameter("@assignmentid", assignmentid)
-            else:
-                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, type) VALUES (False, @name, @path, @courseid, @type)"
-            sql.addParameter("@name", name)
-            sql.addParameter("@path", path)
-            sql.addParameter("@courseid", courseid)
-            sql.addParameter("@type", type)
-            return sql.executeWithId()
-        except:
-            sql.rollback = True
-            raise
-        
-    @staticmethod
     def get_file(documentid):
         sql = whiteboard.sqltool.SqlTool()
         sql.query_text = "SELECT * FROM Documents WHERE documentid = @documentid"

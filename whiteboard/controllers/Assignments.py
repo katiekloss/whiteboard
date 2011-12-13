@@ -56,23 +56,23 @@ class Assignments:
             sql.addParameter("@points", points)
             sql.addParameter("@courseid", courseid)
             assignment_id = sql.executeWithId()
-        
-            # TODO: This is painfully distasteful (and that's an understatement)
-
-            # Basically, the DocumentHelper instance later on (if one exists) uses a second DB
-            # connection which is isolated at READ COMMITTED, and we don't commit
-            # until the first SqlTool disconnects, so this assignment won't exist in time
-            # to create a Document referencing it unless we force a commit
-            sql.query_text = "COMMIT"
-            sql.execute()
         except:
             sql.rollback = True
             raise
 
         if upload.file != None:
             path = "files/%s/assignments/" % courseid
-            document_id = DocumentHelper.create_file(title, path, courseid, assignment_id, 'assignment')
-            
+            try:
+                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid, type) VALUES (False, @name, @path, @courseid, @assignmentid, 'assignment')"
+                sql.addParameter("@name", title)
+                sql.addParameter("@path", path)
+                sql.addParameter("@courseid", courseid)
+                sql.addParameter("@assignmentid", assignment_id)
+                document_id = sql.executeWithId()
+            except:
+                sql.rollback = True
+                raise
+ 
             if not os.path.exists(path):
                 os.makedirs(path)
             with open(path + str(document_id), "wb") as output:
