@@ -16,10 +16,7 @@ class DocumentHelper:
             sql.addParameter("@path", path)
             sql.addParameter("@courseid", courseid)
             sql.addParameter("@type", type)
-            sql.execute()
-            sql.query_text = "SELECT LASTVAL() as id"
-            with sql.execute() as datareader:
-                return datareader.fetch()['id']
+            return sql.executeWithId()
         except:
             sql.rollback = True
             raise

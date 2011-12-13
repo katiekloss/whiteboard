@@ -37,10 +37,7 @@ class Documents:
                 sql.addParameter("@name", name)
                 sql.addParameter("@path", path)
                 sql.addParameter("@courseid", courseid)
-                sql.execute()
-                sql.query_text = "SELECT LASTVAL() AS id"
-                with sql.execute() as datareader:
-                    document_id = datareader.fetch()['id']
+                document_id = sql.executeWithId()
             except:
                 sql.rollback = True
                 raise

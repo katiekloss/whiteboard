@@ -12,10 +12,7 @@ class CourseHelper:
             sql.addParameter("@title", title)
             sql.addParameter("@code", code)
             sql.addParameter("@term", term)
-            sql.execute()
-            sql.query_text = "SELECT LASTVAL() AS id"
-            with sql.execute() as datareader:
-                return datareader.fetch()['id']
+            return sql.executeWithId()
         except:
             sql.rollback = True
             raise

@@ -50,13 +50,12 @@ class Assignments:
 
         sql = whiteboard.sqltool.SqlTool()
         try:
-            sql.query_text = "INSERT INTO Assignments (title, due, points, courseid) VALUES (@title, @duedate, @points, @courseid); SELECT LASTVAL() AS id;"
+            sql.query_text = "INSERT INTO Assignments (title, due, points, courseid) VALUES (@title, @duedate, @points, @courseid)"
             sql.addParameter("@title", title)
             sql.addParameter("@duedate", duedate)
             sql.addParameter("@points", points)
             sql.addParameter("@courseid", courseid)
-            with sql.execute() as datareader:
-                assignment_id = datareader.fetch()['id']
+            assignment_id = sql.executeWithId()
         
             # TODO: This is painfully distasteful (and that's an understatement)
 
@@ -112,10 +111,7 @@ class Assignments:
             sql.addParameter("@path", path)
             sql.addParameter("@courseid", courseid)
             sql.addParameter("@assignmentid", assignmentid)
-            sql.execute()
-            sql.query_text = "SELECT LASTVAL() AS id"
-            with sql.execute() as datareader:
-                document_id = datareader.fetch()['id']
+            document_id = sql.executeWithId()
         except:
             sql.rollback = True
             raise

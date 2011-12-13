@@ -63,6 +63,17 @@ class SqlTool:
         dbcursor.execute(self.query_text, self.__parameters)
         return SqlCursor(dbcursor)
 
+    def executeWithId(self):
+        """Executes the query and then returns the value of the last modified sequence.
+
+        For INSERT statements that create a new primary key value, this returns
+        the primary key for that row.
+        """
+
+        self.execute()
+        self.query_text = "SELECT LASTVAL() AS id"
+        with self.execute() as datareader:
+            return datareader.fetch()['id']
 
 class SqlCursor:
     """Class for accessing the results of a query executed via SqlTool.execute()"""
