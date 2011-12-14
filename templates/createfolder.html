@@ -1,0 +1,15 @@
+<%inherit file="courseskeleton.html" />
+<%def name="title()">Create Folder</%def>
+
+<%block name="coursePageContent">
+<form id="createFolderForm" method="POST">
+Name of folder to create: <input type="text" name="name" placeholder="Exam 1 Review" /><br/>
+Parent folder: <select name="parent">
+<option value="0"></option>
+% for folder in ctx['folders']:
+<option value="${folder['documentid']}">${folder['display_name']}</option>
+% endfor
+</select><br/>
+<input type="submit" value="Create Folder" />
+</form>
+</%block>

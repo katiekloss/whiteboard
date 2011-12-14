@@ -6,6 +6,13 @@
 <form id=frmDocumentUploader" method="POST" enctype="multipart/form-data">
     Document Name: <input type="text" name="name" /><br />
     Document File: <input type="file" name="upload" /><br />
+    Parent folder: <select name="parent">
+<option value="0"></option>
+% for folder in ctx['folders']:
+<option value="${folder['documentid']}">${folder['display_name']}</option>
+% endfor
+</select><br/>
+
     <input type="submit" value="Upload Document" />
 </form>
 </div>

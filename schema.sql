@@ -7,7 +7,7 @@
 --- Types
 ---
 
-CREATE TYPE doctype AS ENUM('assignment', 'response', 'document');
+CREATE TYPE doctype AS ENUM('assignment', 'response', 'document', 'folder');
 
 ---
 --- Tables
@@ -64,9 +64,8 @@ CREATE TABLE Assignments (
 
 CREATE TABLE Documents (
     documentid serial NOT NULL,
-    isfolder boolean NOT NULL,
     name varchar(256) NOT NULL,
-    path varchar(256) NOT NULL,
+    path varchar(256),
     courseid integer NOT NULL,
     assignmentid integer,
     parent integer,

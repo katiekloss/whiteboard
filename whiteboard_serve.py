@@ -24,7 +24,8 @@ def create_routes():
     dispatcher.connect('addAnnouncement', '/course/{courseid}/addAnnouncement', controller=Course(), action='addAnnouncement')
     dispatcher.connect('ajaxAddAnnouncement', '/ajax/courseAddAnnouncement', controller=Ajax(), action='courseAddAnnouncement')
 
-    dispatcher.connect('addDocument', '/course/{courseid}/addDocument', controller=Documents(), action='addDocument')
+    dispatcher.connect('addDocument', '/course/{courseid}/addDocument', controller=Documents(), action='addDocument', conditions=dict(method=['GET']))
+    dispatcher.connect('addDocument_POST', '/course/{courseid}/addDocument', controller=Documents(), action='addDocument_POST', conditions=dict(method=['POST']))
 
     dispatcher.connect('createAssignmentGET', '/course/{courseid}/createassignment', controller=Assignments(), action='createAssignment', conditions=dict(method=['GET']))
     dispatcher.connect('createAssignmentPOST', '/course/{courseid}/createassignment', controller=Assignments(), action='createAssignment_POST', conditions=dict(method=['POST']))
@@ -44,6 +45,10 @@ def create_routes():
 
     dispatcher.connect('bulkRoleAddGET', '/course/{courseid}/bulkRoleAdd', controller=Course(), action='bulkRoleAdd', conditions=dict(method=['GET']))
     dispatcher.connect('bulkRoleAddPOST', '/course/{courseid}/bulkRoleAdd', controller=Course(), action='bulkRoleAdd_POST', conditions=dict(method=['POST']))
+
+    dispatcher.connect('createFolderGET', '/course/{courseid}/createFolder', controller=Documents(), action='createFolder', conditions=dict(method=['GET']))
+    dispatcher.connect('createFolderPOST', '/course/{courseid}/createFolder', controller=Documents(), action='createFolder_POST', conditions=dict(method=['POST']))
+
     # ROUTES END HERE
 
     return dispatcher

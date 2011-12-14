@@ -63,7 +63,7 @@ class Assignments:
         if upload.file != None:
             path = "files/%s/assignments/" % courseid
             try:
-                sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid, type) VALUES (False, @name, @path, @courseid, @assignmentid, 'assignment')"
+                sql.query_text = "INSERT INTO Documents (name, path, courseid, assignmentid, type) VALUES (@name, @path, @courseid, @assignmentid, 'assignment')"
                 sql.addParameter("@name", title)
                 sql.addParameter("@path", path)
                 sql.addParameter("@courseid", courseid)
@@ -106,7 +106,7 @@ class Assignments:
 
         sql = whiteboard.sqltool.SqlTool()
         try:
-            sql.query_text = "INSERT INTO Documents (isfolder, name, path, courseid, assignmentid, type) VALUES (False, @name, @path, @courseid, @assignmentid, 'response')"
+            sql.query_text = "INSERT INTO Documents (name, path, courseid, assignmentid, type) VALUES (@name, @path, @courseid, @assignmentid, 'response')"
             sql.addParameter("@name", "response_%s_%s" % (cherrypy.session['username'], assignmentid))
             sql.addParameter("@path", path)
             sql.addParameter("@courseid", courseid)
