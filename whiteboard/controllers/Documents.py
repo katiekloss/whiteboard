@@ -10,15 +10,57 @@ import mimetypes
 class Documents:
     """Controller for all document-related actions"""
     
-    def documentsMain(self, courseid, path=None):
+    def documentsMain(self, courseid, subfolder):
 
         ctx = {'course': CourseHelper.fetch_course(courseid)}
-        if path == None:
-            pass
+        if subfolder == '/':
+            folder = None
         else:
-            folders = path.split('/')
+            folder = subfolder.split('/')[1]
 
-        ctx['documents'] = DocumentHelper.get_files_for_course(courseid)
+        sql = whiteboard.sqltool.SqlTool()
+        try:
+            if folder:
+                sql.query_text = "SELECT * FROM Documents WHERE courseid = @courseid AND type IN ('document', 'folder') AND parent = @parent"
+                sql.addParameter("@parent", folder)
+            else:
+                sql.query_text = "SELECT * FROM Documents WHERE courseid = @courseid AND type IN ('document', 'folder') AND parent IS NULL"
+            sql.addParameter("@courseid", courseid)
+            with sql.execute() as datareader:
+                ctx['folder_contents'] = [row for row in datareader]
+            if folder != None:
+                sql.query_text = """
+WITH RECURSIVE recursive_folders AS
+(
+    SELECT *, 0 AS level, ARRAY[documentid] AS trail
+    FROM Documents
+    WHERE type = 'folder'
+    AND parent IS NULL
+
+    UNION ALL
+    
+    SELECT D.*, level + 1, F.trail || D.documentid AS trail
+    FROM Documents D
+    JOIN recursive_folders F ON D.parent = F.documentid
+    WHERE D.type = 'folder'
+)
+SELECT * FROM Documents
+WHERE ARRAY[documentid] <@
+(
+    SELECT trail
+    FROM recursive_folders
+    WHERE courseid = @courseid AND trail[array_upper(trail, 1)] = @parent
+)
+"""
+                sql.addParameter("@courseid", courseid)
+                sql.addParameter("@parent", folder)
+                with sql.execute() as datareader:
+                    ctx['parent_folders'] = [row for row in datareader]
+            else:
+                ctx['parent_folders'] = []
+        except:
+            sql.rollback = True
+            raise
         return whiteboard.template.render('documents.html', context_dict=ctx)
 
     @RoleHelper.require_role('instructor,ta', 'You must be an instructor or TA to upload documents')

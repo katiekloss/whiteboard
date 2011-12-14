@@ -30,7 +30,7 @@ def create_routes():
     dispatcher.connect('createAssignmentGET', '/course/{courseid}/createassignment', controller=Assignments(), action='createAssignment', conditions=dict(method=['GET']))
     dispatcher.connect('createAssignmentPOST', '/course/{courseid}/createassignment', controller=Assignments(), action='createAssignment_POST', conditions=dict(method=['POST']))
 
-    dispatcher.connect('documents', '/course/{courseid}/documents/', controller=Documents(), action='documentsMain')
+    dispatcher.connect('documents', '/course/{courseid}/documents{subfolder:.*}', controller=Documents(), action='documentsMain')
     dispatcher.connect('assignments', '/course/{courseid}/assignments', controller=Assignments(), action='assignmentsMain')
     dispatcher.connect('grades', '/course/{courseid}/grades', controller=Grades(), action='gradesMain')
 

@@ -2,8 +2,18 @@
 <%! from whiteboard.utils import url %>
 
 <%block name="coursePageContent">
+<p>
+<a href=".">Course Root</a> /
+% for folder in ctx['parent_folders']:
+<a href="${folder['documentid']}">${folder['name']}</a> /
+% endfor
+</p>
 <ul>
-% for document in ctx['documents']:
+% for document in ctx['folder_contents']:
+% if document['type'] == 'folder':
+<li><a href="./${document['documentid']}">${document['name']} /</a></li>
+% else:
 <li><a href="${url('/document/%s' % document['documentid'])}">${document['name']}</a></li>
+% endif
 % endfor
 </%block>
