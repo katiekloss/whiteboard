@@ -24,13 +24,20 @@ $(function() {
 });
 
 $(function() {
-    $("#roleUsername").change(function() {
+    $("#roleUsername").keyup(function(event) {
+        if(event.keyCode != 13) { return; }
+
         var username = $(this).val();
         var $ajaxData = {'ajaxData': JSON.stringify({'username': username})};
         $.post('${url('/ajax/siteRoleValidate')}', $ajaxData, function(data) {
             if(data["status"] == "success") {
-                $("#siteRoleEditor").removeClass("hidden"); 
                 $("#roleEdit > input[name|=username]").val(username);
+                $("#roleEdit > input[type|=checkbox]").prop("checked", false);
+                for (i in data["roles"]) {
+                    $("#roleEdit > input[value|=\"" + data["roles"][i] + "\"]").prop("checked", true);
+                }
+                $("#siteRoleEditor").removeClass("hidden"); 
+
             }
         });
     });

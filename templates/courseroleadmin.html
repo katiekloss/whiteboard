@@ -24,14 +24,21 @@ $(function() {
 });
 
 $(function() {
-    $("#roleUsername").change(function() {
+    $("#roleUsername").keyup(function(event) {
+        if(event.keyCode != 13) { return; }
+
         var username = $(this).val();
         var $ajaxData = {'ajaxData': JSON.stringify({'username': username, 'courseid': ${ctx['course']['courseid']}})};
         $.post('${url('/ajax/courseRoleValidate')}', $ajaxData, function(data) {
             if(data["status"] == "success") {
-                $("#courseRoleEditor").removeClass("hidden"); 
                 $("#roleEdit > input[name|=username]").val(username);
-                $("#roleEdit > input[name|=courseid]}").val(${ctx['course']['courseid']});
+                $("#roleEdit > input[name|=courseid]").val(${ctx['course']['courseid']});
+                $("#roleEdit > input[type|=checkbox]").prop("checked", false);
+                for(i in data["roles"]) {
+                    $("#roleEdit > input[value|=\"" + data["roles"][i] + "\"]").prop("checked", true);
+                }
+                $("#courseRoleEditor").removeClass("hidden"); 
+
             }
         });
     });

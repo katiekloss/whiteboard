@@ -2,6 +2,7 @@ import whiteboard.helpers.RoleHelper as RoleHelper
 import whiteboard.helpers.AnnouncementHelper as AnnouncementHelper
 import whiteboard.helpers.GradeHelper as GradeHelper
 import whiteboard.template
+import whiteboard.sqltool
 import cherrypy
 import json
 
@@ -18,8 +19,13 @@ class Ajax:
             return whiteboard.template.render('error.html', context_dict = ctx)
 
         cherrypy.response.headers['Content-Type'] = 'text/json'
-            
-        return json.dumps({'status': 'success'})
+        
+        sql = whiteboard.sqltool.SqlTool()
+        sql.query_text = "SELECT rolename FROM Roles WHERE courseid = @courseid AND caseid = @caseid"
+        sql.addParameter("@courseid", form["courseid"])
+        sql.addParameter("@caseid", form["username"])
+        with sql.execute() as datareader:
+            return json.dumps({'status': 'success', 'roles': [row['rolename'] for row in datareader]})
 
     def courseRoleSubmit(self, ajaxData):
         """Update user's roles"""
@@ -50,8 +56,12 @@ class Ajax:
             cherrypy.response.headers['Content-Type'] = 'text/json'
             form = json.loads(ajaxData)
 
-            return json.dumps({'status': 'success'})
-
+            sql = whiteboard.sqltool.SqlTool()
+            sql.query_text = "SELECT rolename FROM Roles WHERE courseid = 0 AND caseid = @caseid"
+            sql.addParameter("@caseid", form['username'])
+            with sql.execute() as datareader:
+                return json.dumps({'status': 'success', 'roles': [role['rolename'] for role in datareader]})
+    
     def siteRoleSubmit(self, ajaxData):
         """Update user's roles"""
 
