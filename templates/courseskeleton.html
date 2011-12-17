@@ -26,15 +26,15 @@ import whiteboard.helpers.RoleHelper as RoleHelper
 <div class="footer">
 
 % if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor'):
-<a href="roleadmin">Manage Roles</a>
-+ <a href="createassignment">Create an Assignment</a>
-+ <a href="bulkRoleAdd">Add Roles in Bulk</a>
+<a href="${url('/course/%s/roleadmin' % ctx['course']['courseid'])}">Manage Roles</a>
++ <a href="${url('/course/%s/createassignment' % ctx['course']['courseid'])}">Create an Assignment</a>
++ <a href="${url('/course/%s/bulkRoleAdd' % ctx['course']['courseid'])}">Add Roles in Bulk</a>
 % endif
 % if RoleHelper.current_user_has_role(ctx['course']['courseid'], 'instructor, ta'):
-+ <a href="addAnnouncement">Create an Announcement</a>
-+ <a href="addDocument">Upload a Document</a>
-+ <a href="createFolder">Create a Folder</a>
-+ <a href="editGrades">Edit Grades</a>
++ <a href="${url('/course/%s/addAnnouncement' % ctx['course']['courseid'])}">Create an Announcement</a>
++ <a href="${url('/course/%s/addDocument' % ctx['course']['courseid'])}">Upload a Document</a>
++ <a href="${url('/course/%s/createFolder' % ctx['course']['courseid'])}">Create a Folder</a>
++ <a href="${url('/course/%s/editGrades' % ctx['course']['courseid'])}">Edit Grades</a>
 % endif
 </div>
 </%block>
