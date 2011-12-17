@@ -49,6 +49,7 @@ def create_routes():
     dispatcher.connect('createFolderGET', '/course/{courseid}/createFolder', controller=Documents(), action='createFolder', conditions=dict(method=['GET']))
     dispatcher.connect('createFolderPOST', '/course/{courseid}/createFolder', controller=Documents(), action='createFolder_POST', conditions=dict(method=['POST']))
 
+    dispatcher.connect('viewResponses', '/course/{courseid}/viewresponses/{assignmentid}', controller=Assignments(), action='viewResponses')
     # ROUTES END HERE
 
     return dispatcher

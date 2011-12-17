@@ -1,0 +1,15 @@
+<%inherit file="courseskeleton.html" />
+<%!
+from whiteboard.utils import url
+%>
+
+<%def name="title()">Responses for Assignment '${ctx['assignment']['title']}'</%def>
+
+<%block name="coursePageContent">
+<p>Viewing responses for assignment '${ctx['assignment']['title']}':</p>
+<ol>
+% for submission in ctx['submissions']:
+<li><a href="${url('/document/%s' % submission['documentid'])}">${submission['caseid']}</a></li>
+% endfor
+</ol>
+</%block>

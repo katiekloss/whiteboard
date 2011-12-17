@@ -4,9 +4,9 @@
 <ul>
 % for assignment in ctx['assignments']:
 % if assignment['documentid'] == None:
-<li>${assignment['title']} - Due by ${assignment['due']}, worth ${assignment['points']} points</li>
+<li>${assignment['title']} - Due by ${assignment['due']}, worth ${assignment['points']} points <a href="assignmentresponse/${assignment['assignmentid']}">(submit response)</a></li>
 % else:
-<li><a href="${url('/document/%s' % assignment['documentid'])}">${assignment['title']}</a> - Due by ${assignment['due']}, worth ${assignment['points']} points</li>
+<li><a href="${url('/document/%s' % assignment['documentid'])}">${assignment['title']}</a> - Due by ${assignment['due']}, worth ${assignment['points']} points <a href="viewresponses/${assignment['assignmentid']}">(submit response)</a></li>
 % endif
 % endfor
 </ul>

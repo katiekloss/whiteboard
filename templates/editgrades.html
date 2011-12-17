@@ -36,7 +36,7 @@ $(function() {
 <tr>
 <th></th>
 % for assignment in AssignmentHelper.fetch_assignments_for_course(ctx['course']['courseid']):
-<th>${assignment['title']}</th>
+<th><a href="${url('/course/%s/viewresponses/%s' % (ctx['course']['courseid'], assignment['assignmentid']))}">${assignment['title']}</a></th>
 % endfor
 </tr>
 % for student in CourseHelper.fetch_users_in_role(ctx['course']['courseid'], 'student'):

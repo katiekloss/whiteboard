@@ -20,9 +20,10 @@ class Assignments:
 
         ctx['assignments'] = []
         sql = whiteboard.sqltool.SqlTool()
-        sql.query_text = """SELECT * FROM Assignments A LEFT OUTER JOIN
+        sql.query_text = """SELECT COALESCE(A.assignmentid, D.assignmentid) AS assignmentid, title, due, documentid, points
+        FROM Assignments A LEFT OUTER JOIN
         (
-            SELECT * FROM Documents WHERE type = 'assignment' 
+            SELECT documentid, assignmentid FROM Documents WHERE type = 'assignment' 
         ) AS D
         ON A.assignmentid = D.assignmentid
         WHERE A.courseid = @courseid"""
@@ -125,3 +126,27 @@ class Assignments:
                     break
                 output.write(data)
         return "Response submitted"
+
+    @RoleHelper.require_role('instructor, ta', 'Only instructors and TAs can view assignment submissions')
+    def viewResponses(self, courseid, assignmentid):
+
+        ctx = {'course': CourseHelper.fetch_course(courseid),
+            'assignment': AssignmentHelper.fetch_assignment(assignmentid)
+        }
+        if ctx['course'] == None or ctx['assignment'] == None:
+            return whiteboard.template.render('error.html', 'That doesn\'t exist.')
+
+        sql = whiteboard.sqltool.SqlTool()
+        sql.query_text = """
+SELECT D.*, G.* FROM Documents D
+JOIN Grades G on D.assignmentid = G.assignmentid
+WHERE type = 'response'
+AND substring(D.name, G.caseid) IS NOT NULL
+AND D.courseid = @courseid
+AND D.assignmentid = @assignmentid"""
+        sql.addParameter("@courseid", courseid)
+        sql.addParameter("@assignmentid", assignmentid)
+        with sql.execute() as datareader:
+            ctx['submissions'] = [row for row in datareader]
+        
+        return whiteboard.template.render('viewresponses.html', context_dict = ctx)
